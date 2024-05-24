@@ -1,9 +1,10 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import { AntdRegistry } from "@ant-design/nextjs-registry";
-import { ConfigProvider, Layout } from "antd";
+import { Button, ConfigProvider, Layout, ThemeConfig } from "antd";
 import { Footer, Header } from "antd/es/layout/layout";
 import "antd/dist/reset.css";
+import variables from "./variables.module.scss";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -17,19 +18,18 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  // アプリケーション全体のテーマ生成
-  // const theme: ThemeConfig = {
+  //アプリケーション全体のテーマ生成
+  // const themeConfig: ThemeConfig = {
   //   token: {
-  //     colorPrimary: "#fff"
-  //   }
+  //     colorPrimary: variables.primaryColor,
+  //   },
   // };
-
   return (
     <html lang="ja">
       <body className={inter.className}>
         <AntdRegistry>
           <ConfigProvider>
-            <Layout>
+            <Layout style={{ minHeight: "100vh" }}>
               <Header />
               {children}
               <Footer />

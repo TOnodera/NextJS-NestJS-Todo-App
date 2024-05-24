@@ -1,0 +1,13 @@
+
+/**
+ * light theme
+ */
+$primary-color: "";
+$secondary-color: "";
+$text-primary-color: "";
+$text-secondary-color: "";
+
+:export {
+    primaryColor: $primary-color;
+    secondaryColor: $secondary-color;
+}

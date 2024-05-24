@@ -31,7 +31,8 @@
 					"editor.formatOnSave": true,
 					"editor.defaultFormatter": "esbenp.prettier-vscode"
 				},
-				"hediet.vscode-drawio.theme": "atlas"
+				"hediet.vscode-drawio.theme": "atlas",
+				"eslint.workingDirectories": ["next-app"]
 			}
 		}
 	}
