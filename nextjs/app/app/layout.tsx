@@ -1,7 +1,14 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import { AntdRegistry } from "@ant-design/nextjs-registry";
-import { Breadcrumb, ConfigProvider, Layout, Space, ThemeConfig } from "antd";
+import {
+  Breadcrumb,
+  Card,
+  ConfigProvider,
+  Layout,
+  Space,
+  ThemeConfig,
+} from "antd";
 import { Content } from "antd/es/layout/layout";
 import "antd/dist/reset.css";
 import {
@@ -14,6 +21,7 @@ import SideMenu from "./components/organizations/Sider";
 import Header from "./components/organizations/Header";
 import Footer from "./components/organizations/Footer";
 import { token2CSSVar } from "@ant-design/cssinjs";
+import { evalManifestWithRetries } from "next/dist/server/load-components";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -67,17 +75,23 @@ export default function RootLayout({
               <Layout hasSider>
                 <SideMenu menus={menus} />
                 <Layout>
-                  <Content>
-                    <div style={{ margin: "3rem" }}>
-                      <Breadcrumb
-                        items={[
-                          { title: "top" },
-                          { title: "todo" },
-                          { title: "create" },
-                        ]}
-                      />
+                  <Content style={{ marginTop: "3rem", padding: "3rem" }}>
+                    <Breadcrumb
+                      items={[
+                        { title: "top" },
+                        { title: "todo" },
+                        { title: "create" },
+                      ]}
+                    />
+                    <Card
+                      style={{
+                        width: "100%",
+                        marginTop: "1rem",
+                        height: "100%",
+                      }}
+                    >
                       {children}
-                    </div>
+                    </Card>
                   </Content>
                   <Footer />
                 </Layout>
