@@ -1,30 +1,18 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import { AntdRegistry } from "@ant-design/nextjs-registry";
-import {
-  ConfigProvider,
-  Layout,
-  Menu,
-  MenuProps,
-  Slider,
-  ThemeConfig,
-} from "antd";
-import { Content, Footer, Header } from "antd/es/layout/layout";
+import { ConfigProvider, Layout, ThemeConfig } from "antd";
+import { Content } from "antd/es/layout/layout";
 import "antd/dist/reset.css";
-import variables from "./variables.module.scss";
 import {
-  AppstoreOutlined,
-  BarChartOutlined,
-  CloudOutlined,
-  ShopOutlined,
-  TeamOutlined,
   UploadOutlined,
   UserOutlined,
   VideoCameraOutlined,
 } from "@ant-design/icons";
 import React from "react";
-import Sider from "antd/es/layout/Sider";
 import SideMenu from "./components/organizations/Sider";
+import Header from "./components/organizations/Header";
+import Footer from "./components/organizations/Footer";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -40,10 +28,18 @@ export default function RootLayout({
 }>) {
   //アプリケーション全体のテーマ生成
   const themeConfig: ThemeConfig = {
+    /*
     token: {
-      colorPrimary: variables.primaryColor,
+      colorPrimaryBg: "#c7e3f9",
     },
+    components: {
+      Menu: {
+        subMenuItemBg: "#fff",
+      },
+    },
+    */
   };
+
   // サイドメニュー
   const menus = [
     UserOutlined,
@@ -63,21 +59,14 @@ export default function RootLayout({
       </head>
       <body className={inter.className}>
         <AntdRegistry>
-          <ConfigProvider>
-            <Layout style={{ height: "100vh" }} hasSider>
-              <SideMenu menus={menus} />
-              <Layout>
-                <Header />
-                <Content>
-                  <div>content</div>
-                  <div>content</div>
-                  <div>content</div>
-                  <div>content</div>
-                </Content>
-                <Footer style={{ textAlign: "center" }}>
-                  Ant Design ©{new Date().getFullYear()} Created by Ant UED
-                </Footer>
+          <ConfigProvider theme={themeConfig}>
+            <Layout style={{ height: "100vh" }}>
+              <Header />
+              <Layout hasSider>
+                <SideMenu menus={menus} />
+                <Content>{children}</Content>
               </Layout>
+              <Footer />
             </Layout>
           </ConfigProvider>
         </AntdRegistry>

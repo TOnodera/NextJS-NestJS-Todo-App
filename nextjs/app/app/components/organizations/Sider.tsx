@@ -1,7 +1,9 @@
 "use client";
+import { MenuOutlined } from "@ant-design/icons";
 import { AntdIconProps } from "@ant-design/icons/lib/components/AntdIcon";
 import { Menu } from "antd";
 import Sider from "antd/es/layout/Sider";
+import { useState } from "react";
 
 type SideMenu = {
   key: string;
@@ -13,24 +15,26 @@ type SideMenu = {
 interface Props {
   menus: SideMenu[];
 }
+
 export default function SideMenu({ menus }: Props) {
+  const [collapsed, setCollapsed] = useState(true);
   return (
-    <Sider
-      breakpoint="md"
-      collapsedWidth="0"
-      style={{ paddingTop: "64px" }}
-      onBreakpoint={(broken) => {
-        console.log(broken);
-      }}
-      onCollapse={(collapsed, type) => {
-        console.log(collapsed, type);
-      }}
-    >
-      <div className="demo-logo-vertical" />
+    <Sider breakpoint="md" collapsed={collapsed} trigger={null}>
+      <span
+        className={
+          "ant-layout-sider-zero-width-trigger ant-layout-sider-zero-width-trigger-left"
+        }
+        style={{
+          top: 0,
+          backgroundColor: "#001529",
+        }}
+        onClick={() => setCollapsed(!collapsed)}
+      >
+        <MenuOutlined />
+      </span>
       <Menu
+        // style={{ backgroundColor: token.colorPrimaryBg }}
         theme="dark"
-        mode="inline"
-        defaultSelectedKeys={["4"]}
         items={menus}
       />
     </Sider>
