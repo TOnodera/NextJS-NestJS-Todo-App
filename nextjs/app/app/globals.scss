@@ -1,10 +1,6 @@
 @import "antd/dist/antd.sass";
 @import url(reset.css) layer(reset);
-@import "variables.module";
 
-$layout-header-height: 85px;
-$layout-header-background: #fff;
-$layout-header-color: #000;
 html {
     font-size: 16px;
 }

@@ -1,3 +1,3 @@
-FROM node:latest
+FROM node:22-bookworm
 
 USER node
