@@ -10,7 +10,7 @@ type Todo {
   title: String!
 
   """詳細"""
-  description: String
+  description: String!
 
   """登録日時"""
   createdAt: DateTime!
@@ -40,15 +40,14 @@ input CreateTodoInput {
   title: String!
 
   """詳細"""
-  description: String
+  description: String!
 }
 
 input UpdateTodoInput {
-  id: Int!
-
   """タイトル"""
   title: String!
 
   """詳細"""
-  description: String
+  description: String!
+  id: Int!
 }
