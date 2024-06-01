@@ -20,7 +20,8 @@
 				"dbaeumer.vscode-eslint",
 				"prisma.prisma",
 				"hediet.vscode-drawio",
-				"apollographql.vscode-apollo"
+				"apollographql.vscode-apollo",
+        "orta.vscode-jest"
 			],
 			"settings": {
 				"[typescript]": {
