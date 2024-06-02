@@ -3,12 +3,14 @@ import {
   CreateTodoDocument,
   CreateTodoInput,
   GetTodosDocument,
+  UpdateTodoInput,
 } from "@/graphql/@generated/graphql";
 import { PlusSquareOutlined } from "@ant-design/icons";
-import { Button, Col, Form, Input, Modal, Row } from "antd";
+import { Button, Col, Modal, Row } from "antd";
 import { useState } from "react";
 import { useMutation, useQuery } from "urql";
 import TodoCard from "./TodoCard";
+import CreateTodoForm from "./CreateTodoForm";
 
 export default function Home() {
   //　登録モーダルオープン
@@ -17,9 +19,9 @@ export default function Home() {
   const [result, reexecuteQuery] = useQuery({ query: GetTodosDocument });
   const { data, fetching, error } = result;
 
-  const [createTodoResult, createTodo] = useMutation(CreateTodoDocument);
   // 登録押下時のハンドラ
-  const onSubmitHandler = (createTodoInput: CreateTodoInput) => {
+  const [createTodoResult, createTodo] = useMutation(CreateTodoDocument);
+  const onCreateTodoFormSubmitHandler = (createTodoInput: CreateTodoInput) => {
     console.log(createTodoInput);
     createTodo({ createTodoInput })
       .then((res) => console.log(res))
@@ -27,7 +29,7 @@ export default function Home() {
   };
 
   return (
-    <div style={{height: "100%"}}>
+    <div style={{ height: "100%" }}>
       <Row justify="center" style={{ height: "10%" }}>
         <Col xs={24} md={20} xl={16} style={{ marginBottom: "1rem" }}>
           <Button type="primary" onClick={() => setIsOpenRegisterModal(true)}>
@@ -39,32 +41,7 @@ export default function Home() {
             onCancel={() => setIsOpenRegisterModal(false)}
             footer={null}
           >
-            <Form style={{ marginTop: "2rem" }} onFinish={onSubmitHandler}>
-              <Form.Item
-                label="タイトル"
-                name="title"
-                rules={[{ required: true, message: "タイトル" }]}
-              >
-                <Input name="title" />
-              </Form.Item>
-              <Form.Item
-                label="タスク詳細"
-                name="description"
-                rules={[
-                  {
-                    required: false,
-                    message: "タスクの詳細を入力してください。 ",
-                  },
-                ]}
-              >
-                <Input.TextArea name="description" />
-              </Form.Item>
-              <Form.Item style={{ textAlign: "right" }}>
-                <Button type="primary" htmlType="submit">
-                  登録
-                </Button>
-              </Form.Item>
-            </Form>
+            <CreateTodoForm onSubmitHandler={onCreateTodoFormSubmitHandler} />
           </Modal>
         </Col>
       </Row>
@@ -72,7 +49,10 @@ export default function Home() {
         <Row justify="center">
           <Col xs={24} md={20} xl={16}>
             {data?.todos.map((todo, idx) => (
-              <div key={idx} style={{ marginBottom: "1rem", cursor: "pointer" }}>
+              <div
+                key={idx}
+                style={{ marginBottom: "1rem", cursor: "pointer" }}
+              >
                 <TodoCard todo={todo} />
               </div>
             ))}
