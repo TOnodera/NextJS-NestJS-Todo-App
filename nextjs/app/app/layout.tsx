@@ -2,9 +2,9 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import { AntdRegistry } from "@ant-design/nextjs-registry";
 import { ConfigProvider, ThemeConfig } from "antd";
-import "antd/dist/reset.css";
 import React from "react";
 import UrqlProvider from "./components/atoms/UrqlProvider";
+import "./globals.scss";
 
 const inter = Inter({ subsets: ["latin"] });
 
