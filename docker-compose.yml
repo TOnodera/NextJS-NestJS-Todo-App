@@ -6,6 +6,8 @@ services:
       - ./nestjs:/workspaces/nestjs
       - ./documents:/workspaces/nestjs/documents
     command: sleep infinity
+    ports:
+      - 3000:3000
   nextjs:
     build: ./nextjs
     volumes:

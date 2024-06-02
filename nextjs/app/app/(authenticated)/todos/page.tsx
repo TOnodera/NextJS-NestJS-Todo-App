@@ -1,40 +1,30 @@
 "use client";
+import {
+  CreateTodoDocument,
+  CreateTodoInput,
+  GetTodosDocument,
+} from "@/graphql/@generated/graphql";
 import { PlusSquareOutlined } from "@ant-design/icons";
-import { Button, Col, Form, Input, Modal, Row, Table } from "antd";
+import { Button, Card, Col, Form, Input, Modal, Row } from "antd";
 import { useState } from "react";
+import { useMutation, useQuery } from "urql";
+import TodoCard from "./TodoCard";
 
 export default function Home() {
-  const columns = [
-    {
-      title: "id",
-      dataIndex: "id",
-      key: "id",
-    },
-    {
-      title: "title",
-      dataIndex: "title",
-      key: "title",
-    },
-    {
-      title: "done",
-      dataIndex: "done",
-      key: "done",
-    },
-  ];
-  const dataSource = [
-    {
-      id: 1,
-      title: "title1",
-      done: false,
-    },
-    {
-      id: 2,
-      title: "title2",
-      done: true,
-    },
-  ];
-
+  //　登録モーダルオープン
   const [isOpenRegisterModal, setIsOpenRegisterModal] = useState(false);
+  // urql実行
+  const [result, reexecuteQuery] = useQuery({ query: GetTodosDocument });
+  const { data, fetching, error } = result;
+
+  const [createTodoResult, createTodo] = useMutation(CreateTodoDocument);
+  // 登録押下時のハンドラ
+  const onSubmitHandler = (createTodoInput: CreateTodoInput) => {
+    console.log(createTodoInput);
+    createTodo({ createTodoInput })
+      .then((res) => console.log(res))
+      .catch((e) => console.error(e));
+  };
 
   return (
     <Row justify="center">
@@ -48,17 +38,13 @@ export default function Home() {
           onCancel={() => setIsOpenRegisterModal(false)}
           footer={null}
         >
-          <Form
-            name="basic"
-            initialValues={{ remember: true }}
-            style={{ marginTop: "2rem" }}
-          >
+          <Form style={{ marginTop: "2rem" }} onFinish={onSubmitHandler}>
             <Form.Item
               label="タイトル"
               name="title"
               rules={[{ required: true, message: "タイトル" }]}
             >
-              <Input />
+              <Input name="title" />
             </Form.Item>
 
             <Form.Item
@@ -71,7 +57,7 @@ export default function Home() {
                 },
               ]}
             >
-              <Input.TextArea />
+              <Input.TextArea name="description" />
             </Form.Item>
 
             <Form.Item style={{ textAlign: "right" }}>
@@ -83,7 +69,9 @@ export default function Home() {
         </Modal>
       </Col>
       <Col xs={24} md={20}>
-        <Table dataSource={dataSource} columns={columns} rowKey="id" />
+        {data?.todos.map((todo, idx) => (
+          <TodoCard todo={todo} key={idx} />
+        ))}
       </Col>
     </Row>
   );
