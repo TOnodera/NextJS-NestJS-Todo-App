@@ -6,7 +6,7 @@ import { getApolloServer } from '@nestjs/apollo';
 import { CreateTodo, Todo } from 'src/generated/graphql';
 import { SingleGraphQLResponse } from './type';
 
-describe('Todo結合テスト', () => {
+describe('Todo登録結合テスト', () => {
   let app: INestApplication;
   let apolloServer: ApolloServer;
 
@@ -94,7 +94,6 @@ describe('Todo結合テスト', () => {
         ),
       );
     });
-    */
     it('タイトルundefined', async () => {
       // タイトルがundefined
       const variables = {
