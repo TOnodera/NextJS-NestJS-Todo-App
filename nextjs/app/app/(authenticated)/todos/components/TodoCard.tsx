@@ -14,8 +14,9 @@ const { Title } = Typography;
 
 interface Props {
   todo: FragmentType<typeof TodoFragmentFragmentDoc>;
+  afterMutation: () => void;
 }
-export default function TodoCard({ todo }: Props) {
+export default function TodoCard({ todo, afterMutation }: Props) {
   const todoFragment = useFragment(TodoFragmentFragmentDoc, todo);
   // 更新時のハンドラ
   const onUpdateTodoFormSubmitHandler = (updateTodoInput: UpdateTodoInput) => {
@@ -60,6 +61,7 @@ export default function TodoCard({ todo }: Props) {
         todo={todo}
         isOpen={isOpen}
         onCancel={() => setIsOpen(false)}
+        afterMutation={afterMutation}
       />
     </>
   );

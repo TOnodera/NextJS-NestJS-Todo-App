@@ -1,33 +1,55 @@
 import { STATUSES } from "@/app/consts";
 import { FragmentType, useFragment } from "@/graphql/@generated";
 import {
+  RemoveTodoDocument,
   TodoFragmentFragmentDoc,
+  UpdateTodoDocument,
   UpdateTodoInput,
 } from "@/graphql/@generated/graphql";
 import { Button, Form, Input, Modal, Radio, Typography } from "antd";
+import { useMutation } from "urql";
 
 const { Title } = Typography;
 
 interface Props {
   onSubmitHandler: (updateTodoInput: UpdateTodoInput) => void;
   onCancel: () => void;
+  afterMutation: () => void;
   todo: FragmentType<typeof TodoFragmentFragmentDoc>;
   isOpen: boolean;
 }
 export default function UpdateTodoModal({
-  onSubmitHandler,
   onCancel,
+  afterMutation,
   todo,
   isOpen,
 }: Props) {
   const todoFragment = useFragment(TodoFragmentFragmentDoc, todo);
+
+  // 更新処理
+  const [updateTodoResult, updateTodo] = useMutation(UpdateTodoDocument);
+  const onUpdateButtonClick = async (updateTodoInput: UpdateTodoInput) => {
+    await updateTodo({
+      updateTodoInput: { ...updateTodoInput, id: todoFragment.id },
+    });
+    afterMutation();
+    onCancel();
+  };
+  // 削除処理
+  const [deleteTodoResult, removeTodo] = useMutation(RemoveTodoDocument);
+  const onDeleteButtonClick = async () => {
+    await removeTodo({ id: todoFragment.id });
+    afterMutation();
+    onCancel();
+  };
+
   return (
     <Modal open={isOpen} footer={null} onCancel={onCancel}>
       <Title level={4}>タスク更新</Title>
       <Form
         style={{ marginTop: "2rem" }}
-        onFinish={(updateTodoInput: UpdateTodoInput) =>
-          onSubmitHandler(updateTodoInput)
+        onFinish={async (updateTodoInput: UpdateTodoInput) =>
+          await onUpdateButtonClick(updateTodoInput)
         }
         initialValues={{
           title: todoFragment.title,
@@ -63,7 +85,7 @@ export default function UpdateTodoModal({
           >
             更新
           </Button>
-          <Button type="primary" danger>
+          <Button type="primary" danger onClick={onDeleteButtonClick}>
             削除
           </Button>
         </Form.Item>

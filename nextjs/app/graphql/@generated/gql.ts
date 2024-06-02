@@ -13,7 +13,7 @@ import { TypedDocumentNode as DocumentNode } from '@graphql-typed-document-node/
  * Therefore it is highly recommended to use the babel or swc plugin for production.
  */
 const documents = {
-    "fragment TodoFragment on Todo {\n  id\n  title\n  description\n  createdAt\n  updatedAt\n}\n\nmutation CreateTodo($createTodoInput: CreateTodoInput!) {\n  createTodo(createTodoInput: $createTodoInput) {\n    ...TodoFragment\n  }\n}\n\nquery GetTodos {\n  todos {\n    ...TodoFragment\n  }\n}": types.TodoFragmentFragmentDoc,
+    "fragment TodoFragment on Todo {\n  id\n  title\n  description\n  createdAt\n  updatedAt\n}\n\nmutation CreateTodo($createTodoInput: CreateTodoInput!) {\n  createTodo(createTodoInput: $createTodoInput) {\n    ...TodoFragment\n  }\n}\n\nmutation UpdateTodo($updateTodoInput: UpdateTodoInput!) {\n  updateTodo(updateTodoInput: $updateTodoInput) {\n    ...TodoFragment\n  }\n}\n\nmutation RemoveTodo($id: Int!) {\n  removeTodo(id: $id) {\n    id\n  }\n}\n\nquery GetTodos {\n  todos {\n    ...TodoFragment\n  }\n}": types.TodoFragmentFragmentDoc,
 };
 
 /**
@@ -33,7 +33,7 @@ export function graphql(source: string): unknown;
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function graphql(source: "fragment TodoFragment on Todo {\n  id\n  title\n  description\n  createdAt\n  updatedAt\n}\n\nmutation CreateTodo($createTodoInput: CreateTodoInput!) {\n  createTodo(createTodoInput: $createTodoInput) {\n    ...TodoFragment\n  }\n}\n\nquery GetTodos {\n  todos {\n    ...TodoFragment\n  }\n}"): (typeof documents)["fragment TodoFragment on Todo {\n  id\n  title\n  description\n  createdAt\n  updatedAt\n}\n\nmutation CreateTodo($createTodoInput: CreateTodoInput!) {\n  createTodo(createTodoInput: $createTodoInput) {\n    ...TodoFragment\n  }\n}\n\nquery GetTodos {\n  todos {\n    ...TodoFragment\n  }\n}"];
+export function graphql(source: "fragment TodoFragment on Todo {\n  id\n  title\n  description\n  createdAt\n  updatedAt\n}\n\nmutation CreateTodo($createTodoInput: CreateTodoInput!) {\n  createTodo(createTodoInput: $createTodoInput) {\n    ...TodoFragment\n  }\n}\n\nmutation UpdateTodo($updateTodoInput: UpdateTodoInput!) {\n  updateTodo(updateTodoInput: $updateTodoInput) {\n    ...TodoFragment\n  }\n}\n\nmutation RemoveTodo($id: Int!) {\n  removeTodo(id: $id) {\n    id\n  }\n}\n\nquery GetTodos {\n  todos {\n    ...TodoFragment\n  }\n}"): (typeof documents)["fragment TodoFragment on Todo {\n  id\n  title\n  description\n  createdAt\n  updatedAt\n}\n\nmutation CreateTodo($createTodoInput: CreateTodoInput!) {\n  createTodo(createTodoInput: $createTodoInput) {\n    ...TodoFragment\n  }\n}\n\nmutation UpdateTodo($updateTodoInput: UpdateTodoInput!) {\n  updateTodo(updateTodoInput: $updateTodoInput) {\n    ...TodoFragment\n  }\n}\n\nmutation RemoveTodo($id: Int!) {\n  removeTodo(id: $id) {\n    id\n  }\n}\n\nquery GetTodos {\n  todos {\n    ...TodoFragment\n  }\n}"];
 
 export function graphql(source: string) {
   return (documents as any)[source] ?? {};

@@ -1,32 +1,21 @@
 "use client";
-import {
-  CreateTodoDocument,
-  CreateTodoInput,
-  GetTodosDocument,
-  UpdateTodoInput,
-} from "@/graphql/@generated/graphql";
+import { GetTodosDocument } from "@/graphql/@generated/graphql";
 import { PlusSquareOutlined } from "@ant-design/icons";
-import { Button, Col, Modal, Row } from "antd";
-import { useState } from "react";
-import { useMutation, useQuery } from "urql";
-import TodoCard from "./TodoCard";
-import CreateTodoForm from "./CreateTodoModal";
-import CreateTodoModal from "./CreateTodoModal";
+import { Button, Col, Row, Skeleton } from "antd";
+import { Suspense, useState } from "react";
+import { useQuery } from "urql";
+import TodoCard from "./components/TodoCard";
+import CreateTodoModal from "./components/CreateTodoModal";
 
 export default function Home() {
   //　登録モーダルオープン
   const [isOpenRegisterModal, setIsOpenRegisterModal] = useState(false);
   // urql実行
-  const [result, reexecuteQuery] = useQuery({ query: GetTodosDocument });
+  const [result, reExecuteQuery] = useQuery({ query: GetTodosDocument });
   const { data, fetching, error } = result;
-
-  // 登録押下時のハンドラ
-  const [createTodoResult, createTodo] = useMutation(CreateTodoDocument);
-  const onCreateTodoFormSubmitHandler = (createTodoInput: CreateTodoInput) => {
-    console.log(createTodoInput);
-    createTodo({ createTodoInput })
-      .then((res) => console.log(res))
-      .catch((e) => console.error(e));
+  // データ再取得用関数を作成
+  const refetchTodos = async () => {
+    reExecuteQuery({ requestPolicy: "network-only" });
   };
 
   return (
@@ -40,23 +29,24 @@ export default function Home() {
           <CreateTodoModal
             isOpen={isOpenRegisterModal}
             onCancel={() => setIsOpenRegisterModal(false)}
-            onSubmitHandler={onCreateTodoFormSubmitHandler}
           />
         </Col>
       </Row>
       <div style={{ height: "90%", overflowY: "auto" }}>
-        <Row justify="center">
-          <Col xs={24} md={20} xl={16}>
-            {data?.todos.map((todo, idx) => (
-              <div
-                key={idx}
-                style={{ marginBottom: "1rem", cursor: "pointer" }}
-              >
-                <TodoCard todo={todo} />
-              </div>
-            ))}
-          </Col>
-        </Row>
+        <Skeleton loading={fetching} active paragraph={{ rows: 8 }}>
+          <Row justify="center">
+            <Col xs={24} md={20} xl={16}>
+              {data?.todos.map((todo, idx) => (
+                <div
+                  key={idx}
+                  style={{ marginBottom: "1rem", cursor: "pointer" }}
+                >
+                  <TodoCard todo={todo} afterMutation={refetchTodos} />
+                </div>
+              ))}
+            </Col>
+          </Row>
+        </Skeleton>
       </div>
     </div>
   );

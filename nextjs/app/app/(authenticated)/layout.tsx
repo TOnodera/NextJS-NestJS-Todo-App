@@ -74,13 +74,6 @@ export default function RootLayout({
             <SideMenu menus={menus} />
             <Layout>
               <Content style={{ marginTop: "3rem", padding: "3rem" }}>
-                <Breadcrumb
-                  items={[
-                    { title: "top" },
-                    { title: "todo" },
-                    { title: "create" },
-                  ]}
-                />
                 <Card
                   style={{
                     width: "100%",

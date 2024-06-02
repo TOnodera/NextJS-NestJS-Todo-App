@@ -12,6 +12,18 @@ mutation CreateTodo($createTodoInput: CreateTodoInput!) {
   }
 }
 
+mutation UpdateTodo($updateTodoInput: UpdateTodoInput!) {
+  updateTodo(updateTodoInput: $updateTodoInput) {
+    ...TodoFragment
+  }
+}
+
+mutation RemoveTodo($id: Int!) {
+  removeTodo(id: $id) {
+    id
+  }
+}
+
 query GetTodos {
   todos {
     ...TodoFragment
