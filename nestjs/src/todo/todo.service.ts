@@ -11,7 +11,7 @@ export class TodoService {
   }
 
   async findAll() {
-    return await this.prisma.todos.findMany();
+    return await this.prisma.todos.findMany({ orderBy: { createdAt: 'desc' } });
   }
 
   async findOne(id: number) {
