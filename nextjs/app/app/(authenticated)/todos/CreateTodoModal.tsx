@@ -1,20 +1,27 @@
 import { CreateTodoInput } from "@/graphql/@generated/graphql";
-import { Button, Form, Input, Typography } from "antd";
+import { Button, Form, Input, Modal, Typography } from "antd";
 
 const { Title } = Typography;
 
 interface Props {
   onSubmitHandler: (createTodoInput: CreateTodoInput) => void;
+  isOpen: boolean;
+  onCancel: () => void;
 }
-export default function CreateTodoForm({ onSubmitHandler }: Props) {
+export default function CreateTodoModal({
+  onSubmitHandler,
+  isOpen,
+  onCancel,
+}: Props) {
   return (
-    <>
+    <Modal open={isOpen} onCancel={onCancel} footer={null}>
       <Title level={4}>新規タスク登録</Title>
       <Form
         style={{ marginTop: "2rem" }}
-        onFinish={(createTodoInput: CreateTodoInput) =>
-          onSubmitHandler(createTodoInput)
-        }
+        onFinish={(createTodoInput: CreateTodoInput) => {
+          onSubmitHandler(createTodoInput);
+          onCancel();
+        }}
       >
         <Form.Item
           label="タイトル"
@@ -32,6 +39,6 @@ export default function CreateTodoForm({ onSubmitHandler }: Props) {
           </Button>
         </Form.Item>
       </Form>
-    </>
+    </Modal>
   );
 }

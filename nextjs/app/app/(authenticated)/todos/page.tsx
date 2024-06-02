@@ -10,7 +10,8 @@ import { Button, Col, Modal, Row } from "antd";
 import { useState } from "react";
 import { useMutation, useQuery } from "urql";
 import TodoCard from "./TodoCard";
-import CreateTodoForm from "./CreateTodoForm";
+import CreateTodoForm from "./CreateTodoModal";
+import CreateTodoModal from "./CreateTodoModal";
 
 export default function Home() {
   //　登録モーダルオープン
@@ -36,13 +37,11 @@ export default function Home() {
             <PlusSquareOutlined />
             登録
           </Button>
-          <Modal
-            open={isOpenRegisterModal}
+          <CreateTodoModal
+            isOpen={isOpenRegisterModal}
             onCancel={() => setIsOpenRegisterModal(false)}
-            footer={null}
-          >
-            <CreateTodoForm onSubmitHandler={onCreateTodoFormSubmitHandler} />
-          </Modal>
+            onSubmitHandler={onCreateTodoFormSubmitHandler}
+          />
         </Col>
       </Row>
       <div style={{ height: "90%", overflowY: "auto" }}>
