@@ -21,7 +21,8 @@
 				"prisma.prisma",
 				"hediet.vscode-drawio",
 				"apollographql.vscode-apollo",
-        "orta.vscode-jest"
+				"mhutchie.git-graph",
+        		"orta.vscode-jest"
 			],
 			"settings": {
 				"[typescript]": {

@@ -12,5 +12,5 @@ RUN ln -sf /usr/share/zoneinfo/Asia/Tokyo /etc/localtime
 RUN sed -i -e 's/# \(ja_JP.UTF-8\)/\1/' /etc/locale.gen \
     && locale-gen \
     && update-locale LANG=ja_JP.UTF-8
-
+WORKDIR /workspaces/nextjs
 USER node
