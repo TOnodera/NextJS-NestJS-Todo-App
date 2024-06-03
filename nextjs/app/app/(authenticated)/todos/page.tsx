@@ -2,7 +2,7 @@
 import { GetTodosDocument } from "@/graphql/@generated/graphql";
 import { PlusSquareOutlined } from "@ant-design/icons";
 import { Button, Col, Row, Skeleton } from "antd";
-import { Suspense, useState } from "react";
+import { useState } from "react";
 import { useQuery } from "urql";
 import TodoCard from "./components/TodoCard";
 import CreateTodoModal from "./components/CreateTodoModal";
