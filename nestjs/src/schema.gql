@@ -24,15 +24,36 @@ A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date
 """
 scalar DateTime
 
+type User {
+  """ID"""
+  id: Int!
+
+  """名前"""
+  name: String!
+
+  """email"""
+  email: String!
+
+  """登録日時"""
+  createdAt: DateTime!
+
+  """更新日時"""
+  updatedAt: DateTime!
+}
+
 type Query {
   todos: [Todo!]!
   todo(id: Int!): Todo!
+  user(id: Int!): User!
 }
 
 type Mutation {
   createTodo(createTodoInput: CreateTodoInput!): Todo!
   updateTodo(updateTodoInput: UpdateTodoInput!): Todo!
   removeTodo(id: Int!): Todo!
+  createUser(createUserInput: CreateUserInput!): User!
+  updateUser(updateUserInput: UpdateUserInput!): User!
+  removeUser(id: Int!): User!
 }
 
 input CreateTodoInput {
@@ -51,4 +72,15 @@ input UpdateTodoInput {
 
   """詳細"""
   description: String
+}
+
+input CreateUserInput {
+  """Example field (placeholder)"""
+  exampleField: Int!
+}
+
+input UpdateUserInput {
+  """Example field (placeholder)"""
+  exampleField: Int
+  id: Int!
 }
