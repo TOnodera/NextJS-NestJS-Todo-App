@@ -10,7 +10,7 @@ import { JwtModule } from '@nestjs/jwt';
     UserModule,
     PassportModule,
     JwtModule.register({
-      secret: process.env.JWT_SECRET,
+      secret: process.env.JWT_SECRET, // TODO configプロバイダ使う
       signOptions: { expiresIn: '60s' },
     }),
   ],
