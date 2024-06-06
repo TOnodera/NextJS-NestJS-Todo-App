@@ -1,7 +1,5 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import { UserWithoutPassword } from 'src/type';
-import { User } from 'src/user/entities/user.entity';
 import { UserService } from 'src/user/user.service';
 
 @Injectable()
@@ -10,24 +8,15 @@ export class AuthService {
     private readonly userService: UserService,
     private readonly jwtService: JwtService,
   ) {}
-  async validateUser(
-    email: string,
-    pass: string,
-  ): Promise<UserWithoutPassword | null> {
+  async login(email: string, pass: string): Promise<{ accessToken: string }> {
     // TODO hash化したパスワードで実行するようにする
     const user = await this.userService.findByEmail(email);
-    if (user && user.password === pass) {
-      // passwordは除外
-      const { password, ...result } = user;
-      return result;
+    if (user?.password !== pass) {
+      throw new UnauthorizedException();
     }
-    return null;
-  }
-
-  async login(user: UserWithoutPassword) {
-    const payload = { userName: user.name, sub: user.id };
+    const payload = { username: user.name, sub: user.id };
     return {
-      access_token: this.jwtService.sign(payload),
+      accessToken: await this.jwtService.signAsync(payload),
     };
   }
 }
