@@ -1,7 +1,7 @@
 FROM node:22-bookworm
 
 RUN apt-get update -y \
-    && apt-get install -y git vim locales tzdata \
+    && apt-get install -y git vim locales tzdata redis-tools \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
