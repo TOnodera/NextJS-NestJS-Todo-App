@@ -1,7 +1,4 @@
-import {
-  CreateTodoDocument,
-  CreateTodoInput,
-} from "@/graphql/@generated/graphql";
+import { CreateTodoDocument, CreateTodoInput } from "@/graphql/@generated/graphql";
 import { Button, Form, Input, Modal, Typography } from "antd";
 import { useMutation } from "urql";
 

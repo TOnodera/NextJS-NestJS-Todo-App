@@ -3,8 +3,7 @@ export const TODO_TASK_STATUS = {
   DOING: 2,
   DONE: 3,
 } as const;
-export type TODO_TASK_STATUS =
-  (typeof TODO_TASK_STATUS)[keyof typeof TODO_TASK_STATUS];
+export type TODO_TASK_STATUS = (typeof TODO_TASK_STATUS)[keyof typeof TODO_TASK_STATUS];
 
 export const STATUSES: { name: string; status: TODO_TASK_STATUS }[] = [
   {

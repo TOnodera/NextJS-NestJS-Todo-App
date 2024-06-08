@@ -1,9 +1,6 @@
 import { STATUSES } from "@/app/consts";
 import { FragmentType, useFragment } from "@/graphql/@generated";
-import {
-  TodoFragmentFragmentDoc,
-  UpdateTodoInput,
-} from "@/graphql/@generated/graphql";
+import { TodoFragmentFragmentDoc, UpdateTodoInput } from "@/graphql/@generated/graphql";
 import { Card, Col, Radio, Row } from "antd";
 import { Typography } from "antd";
 import UpdateTodoModal from "./UpdateTodoModal";
@@ -48,10 +45,7 @@ export default function TodoCard({ todo, afterMutation }: Props) {
         <Row justify="end">
           <Col>
             <span>
-              登録日時:{" "}
-              {DateTime.fromISO(todoFragment.createdAt).toFormat(
-                "yyyy年MM月dd日 H時m分"
-              )}
+              登録日時: {DateTime.fromISO(todoFragment.createdAt).toFormat("yyyy年MM月dd日 H時m分")}
             </span>
           </Col>
         </Row>

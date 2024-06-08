@@ -37,10 +37,7 @@ export default function Home() {
           <Row justify="center">
             <Col xs={24} md={20} xl={16}>
               {data?.todos.map((todo, idx) => (
-                <div
-                  key={idx}
-                  style={{ marginBottom: "1rem", cursor: "pointer" }}
-                >
+                <div key={idx} style={{ marginBottom: "1rem", cursor: "pointer" }}>
                   <TodoCard todo={todo} afterMutation={refetchTodos} />
                 </div>
               ))}

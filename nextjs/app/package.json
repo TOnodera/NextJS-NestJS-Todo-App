@@ -7,6 +7,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
+    "fmt": "prettier -w ./app/**/*.{ts,tsx}",
     "codegen": "graphql-codegen --config codegen.ts"
   },
   "dependencies": {
@@ -14,12 +15,14 @@
     "@ant-design/icons": "^5.3.7",
     "@ant-design/nextjs-registry": "^1.0.0",
     "antd": "^5.17.3",
+    "http-status-codes": "^2.3.0",
     "luxon": "^3.4.4",
     "next": "14.2.3",
     "react": "^18",
     "react-dom": "^18",
     "server-only": "^0.0.1",
-    "urql": "^4.1.0"
+    "urql": "^4.1.0",
+    "zod": "^3.23.8"
   },
   "devDependencies": {
     "@graphql-codegen/cli": "5.0.2",
@@ -35,6 +38,7 @@
     "@types/react-dom": "^18",
     "eslint": "^8",
     "eslint-config-next": "14.2.3",
+    "prettier": "^3.3.1",
     "sass": "^1.77.2",
     "typescript": "^5"
   }

@@ -18,12 +18,7 @@ interface Props {
   todo: FragmentType<typeof TodoFragmentFragmentDoc>;
   isOpen: boolean;
 }
-export default function UpdateTodoModal({
-  onCancel,
-  afterMutation,
-  todo,
-  isOpen,
-}: Props) {
+export default function UpdateTodoModal({ onCancel, afterMutation, todo, isOpen }: Props) {
   const todoFragment = useFragment(TodoFragmentFragmentDoc, todo);
 
   // 更新処理
@@ -64,10 +59,7 @@ export default function UpdateTodoModal({
           <Input name="title" value={todoFragment.title} />
         </Form.Item>
         <Form.Item label="タスク詳細" name="description">
-          <Input.TextArea
-            name="description"
-            value={todoFragment.description ?? undefined}
-          />
+          <Input.TextArea name="description" value={todoFragment.description ?? undefined} />
         </Form.Item>
         <Form.Item style={{ textAlign: "right" }}>
           {STATUSES.map((status, idx) => (
@@ -77,12 +69,7 @@ export default function UpdateTodoModal({
           ))}
         </Form.Item>
         <Form.Item style={{ textAlign: "right" }}>
-          <Button
-            type="primary"
-            htmlType="submit"
-            ghost
-            style={{ marginRight: "1rem" }}
-          >
+          <Button type="primary" htmlType="submit" ghost style={{ marginRight: "1rem" }}>
             更新
           </Button>
           <Button type="primary" danger onClick={onDeleteButtonClick}>

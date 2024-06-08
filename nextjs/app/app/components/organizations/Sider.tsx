@@ -21,9 +21,7 @@ export default function SideMenu({ menus }: Props) {
   return (
     <Sider breakpoint="md" collapsed={collapsed} trigger={null}>
       <span
-        className={
-          "ant-layout-sider-zero-width-trigger ant-layout-sider-zero-width-trigger-left"
-        }
+        className={"ant-layout-sider-zero-width-trigger ant-layout-sider-zero-width-trigger-left"}
         style={{
           top: 0,
           backgroundColor: "#001529",
