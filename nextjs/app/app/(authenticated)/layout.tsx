@@ -9,6 +9,8 @@ import React from "react";
 import SideMenu from "../components/organizations/Sider";
 import Header from "../components/organizations/Header";
 import Footer from "../components/organizations/Footer";
+import { cookies } from "next/headers";
+import { createClient } from "redis";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -40,11 +42,22 @@ const menus = [UserOutlined, VideoCameraOutlined, UploadOutlined, UserOutlined].
   }),
 );
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  // セッションIDからデータを取得
+  const sessionId = cookies().get("session")?.value;
+
+  const client = await createClient({ url: process.env.REDIS_URL });
+  await client.connect();
+  if (sessionId) {
+    const data = await client.get(sessionId);
+    const accessToken = JSON.parse(data as string);
+    console.log("accessTokenFrom: ", accessToken);
+  }
+  await client.disconnect();
   return (
     <Layout style={{ height: "100vh" }}>
       <Header />

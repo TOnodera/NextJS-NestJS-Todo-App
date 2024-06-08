@@ -9,8 +9,9 @@ export async function post<T, R>(path: string, data: T): Promise<ApiResponse<R>>
     },
     method: "POST",
     body: JSON.stringify(data),
-  }).then((r) => {
-    return { data: r.json() as R, status: r.status };
+  }).then(async (r) => {
+    return { data: (await r.json()) as R, status: r.status };
   });
+  console.log("R: ", result.data);
   return { status: result.status, data: result.data };
 }

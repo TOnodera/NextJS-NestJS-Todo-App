@@ -26,3 +26,9 @@ export type ApiResponse<T> = {
   data: T;
   status: StatusCodes;
 };
+
+// セッションデータ型
+export type SessionDataType = {
+  sessionId: string;
+  accessToken: string | undefined;
+};

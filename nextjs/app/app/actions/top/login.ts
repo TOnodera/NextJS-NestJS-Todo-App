@@ -5,7 +5,14 @@ import { AccessToken, Credentials, LoginFormErrorType } from "@/app/type";
 import { z } from "zod";
 import { post } from "@/app/utils";
 import { StatusCodes } from "http-status-codes";
+import { cookies } from "next/headers";
+import { v4 as uuid } from "uuid";
+import dayjs from "dayjs";
+import { createClient } from "redis";
 
+/**
+ * バリデーションスキーマ
+ */
 const LoginSchema = z.object({
   email: z
     .string({
@@ -32,7 +39,7 @@ export const onLoginSubmit = async (
   if (!validatedFields.success) {
     return {
       errors: validatedFields.error.flatten().fieldErrors,
-      message: "認証情報に誤りがあります",
+      message: "認証に失敗しました。",
     };
   }
   const { status, data } = await post<Credentials, AccessToken>(
@@ -43,5 +50,17 @@ export const onLoginSubmit = async (
     return { message: "認証に失敗しました。" };
   }
   // TODO セッションにトークン詰める
+  const sessionId = uuid();
+  cookies().set("session", sessionId, {
+    httpOnly: true,
+    secure: true,
+    maxAge: dayjs().add(7, "day").millisecond(),
+    path: "/",
+  });
+  const client = await createClient({ url: process.env.REDIS_URL });
+  await client.connect();
+  await client.set(sessionId, JSON.stringify({ sessionId, accessToken: data.accessToken }));
+  await client.disconnect();
+
   redirect("/todos");
 };
