@@ -46,6 +46,7 @@ export const onLoginSubmit = async (
     "/auth/login",
     validatedFields.data,
   );
+  console.log(data, status)
   // ログイン失敗時のメッセージ
   if (status !== StatusCodes.OK) {
     return { message: "認証に失敗しました。" };

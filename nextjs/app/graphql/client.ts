@@ -1,7 +1,8 @@
 import { Client, cacheExchange, fetchExchange } from "urql";
 
-const url = process.env.GRAPHQL_URL;
 export const client = (accessToken: string) => {
+  const url = process.env.NEXT_PUBLIC_GRAPHQL_URL;
+
   if (!url) {
     throw new Error("GRAPHQLのエンドポイントが設定されていません。");
   }

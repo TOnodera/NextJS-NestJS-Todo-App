@@ -55,6 +55,7 @@ export default async function RootLayout({
   if (!accessToken) {
     redirect("/");
   }
+  // TODO 無効なセッションIDの場合はトップページにリダイレクト(存在しないID、期限切れのID、...)
 
   return (
     <UrqlProvider token={accessToken}>
