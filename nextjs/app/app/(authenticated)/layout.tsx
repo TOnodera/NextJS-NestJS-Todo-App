@@ -11,6 +11,9 @@ import Header from "../components/organizations/Header";
 import Footer from "../components/organizations/Footer";
 import { cookies } from "next/headers";
 import { createClient } from "redis";
+import { getAccessToken } from "../utils";
+import { redirect } from "next/navigation";
+import UrqlProvider from "../components/atoms/UrqlProvider";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -48,36 +51,33 @@ export default async function RootLayout({
   children: React.ReactNode;
 }>) {
   // セッションIDからデータを取得
-  const sessionId = cookies().get("session")?.value;
-
-  const client = await createClient({ url: process.env.REDIS_URL });
-  await client.connect();
-  if (sessionId) {
-    const data = await client.get(sessionId);
-    const accessToken = JSON.parse(data as string);
-    console.log("accessTokenFrom: ", accessToken);
+  const accessToken = await getAccessToken();
+  if (!accessToken) {
+    redirect("/");
   }
-  await client.disconnect();
+
   return (
-    <Layout style={{ height: "100vh" }}>
-      <Header />
-      <Layout hasSider>
-        <SideMenu menus={menus} />
-        <Layout>
-          <Content style={{ marginTop: "3rem", padding: "3rem" }}>
-            <Card
-              style={{
-                width: "100%",
-                marginTop: "1rem",
-                height: "100%",
-              }}
-            >
-              {children}
-            </Card>
-          </Content>
-          <Footer />
+    <UrqlProvider token={accessToken}>
+      <Layout style={{ height: "100vh" }}>
+        <Header />
+        <Layout hasSider>
+          <SideMenu menus={menus} />
+          <Layout>
+            <Content style={{ marginTop: "3rem", padding: "3rem" }}>
+              <Card
+                style={{
+                  width: "100%",
+                  marginTop: "1rem",
+                  height: "100%",
+                }}
+              >
+                {children}
+              </Card>
+            </Content>
+            <Footer />
+          </Layout>
         </Layout>
       </Layout>
-    </Layout>
+    </UrqlProvider>
   );
 }

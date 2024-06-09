@@ -3,12 +3,8 @@ import "server-only";
 import { redirect } from "next/navigation";
 import { AccessToken, Credentials, LoginFormErrorType } from "@/app/type";
 import { z } from "zod";
-import { post } from "@/app/utils";
+import { post, setAccessToken } from "@/app/utils";
 import { StatusCodes } from "http-status-codes";
-import { cookies } from "next/headers";
-import { v4 as uuid } from "uuid";
-import dayjs from "dayjs";
-import { createClient } from "redis";
 
 /**
  * バリデーションスキーマ
@@ -19,7 +15,7 @@ const LoginSchema = z.object({
       required_error: "メールアドレスを入力してください。",
     })
     .email({
-      message: "不正なメールアドレスです。",
+      message: "メールアドレスを入力してください。",
     }),
   password: z.string({
     required_error: "パスワードを入力してください。",
@@ -42,25 +38,21 @@ export const onLoginSubmit = async (
       message: "認証に失敗しました。",
     };
   }
+
+  /**
+   * ログイン認証
+   */
   const { status, data } = await post<Credentials, AccessToken>(
     "/auth/login",
     validatedFields.data,
   );
+  // ログイン失敗時のメッセージ
   if (status !== StatusCodes.OK) {
     return { message: "認証に失敗しました。" };
   }
-  // TODO セッションにトークン詰める
-  const sessionId = uuid();
-  cookies().set("session", sessionId, {
-    httpOnly: true,
-    secure: true,
-    maxAge: dayjs().add(7, "day").millisecond(),
-    path: "/",
-  });
-  const client = await createClient({ url: process.env.REDIS_URL });
-  await client.connect();
-  await client.set(sessionId, JSON.stringify({ sessionId, accessToken: data.accessToken }));
-  await client.disconnect();
+
+  // セッションにトークン設定
+  await setAccessToken(data.accessToken);
 
   redirect("/todos");
 };

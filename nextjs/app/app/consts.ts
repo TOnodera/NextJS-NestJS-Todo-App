@@ -19,3 +19,6 @@ export const STATUSES: { name: string; status: TODO_TASK_STATUS }[] = [
     status: TODO_TASK_STATUS.DONE,
   },
 ] as const;
+
+// セッション用のクッキー有効期限(日数)
+export const COOKIE_TTL_DAY = 7;
