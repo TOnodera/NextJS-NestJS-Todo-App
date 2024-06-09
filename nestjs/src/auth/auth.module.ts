@@ -12,7 +12,7 @@ import { jwtConstants } from './constants';
     JwtModule.register({
       global: true,
       secret: jwtConstants.secret, // TODO configプロバイダ使う
-      signOptions: { expiresIn: '60s' },
+      signOptions: { expiresIn: '3600s' },
     }),
   ],
   providers: [AuthService, JwtStrategy],
