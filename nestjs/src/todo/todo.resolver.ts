@@ -3,6 +3,8 @@ import { TodoService } from './todo.service';
 import { Todo } from './entities/todo.entity';
 import { CreateTodoInput } from './dto/create-todo.input';
 import { UpdateTodoInput } from './dto/update-todo.input';
+import { UseGuards } from '@nestjs/common';
+import { JwtAuthGuard } from 'src/auth/auth.guard';
 
 @Resolver(() => Todo)
 export class TodoResolver {
@@ -13,6 +15,7 @@ export class TodoResolver {
     return await this.todoService.create(createTodoInput);
   }
 
+  @UseGuards(JwtAuthGuard)
   @Query(() => [Todo], { name: 'todos' })
   findAll() {
     return this.todoService.findAll();

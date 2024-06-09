@@ -3,18 +3,20 @@ import { AuthService } from './auth.service';
 import { UserModule } from 'src/user/user.module';
 import { JwtModule } from '@nestjs/jwt';
 import { AuthController } from './auth.controller';
+import { JwtStrategy } from './jwt.strategy';
+import { jwtConstants } from './constants';
 
 @Module({
   imports: [
     UserModule,
     JwtModule.register({
       global: true,
-      secret: process.env.JWT_SECRET, // TODO configプロバイダ使う
+      secret: jwtConstants.secret, // TODO configプロバイダ使う
       signOptions: { expiresIn: '60s' },
     }),
   ],
-  providers: [AuthService],
-  exports: [AuthService],
+  providers: [AuthService, JwtStrategy],
+  exports: [AuthService, JwtStrategy, JwtModule],
   controllers: [AuthController],
 })
 export class AuthModule {}
