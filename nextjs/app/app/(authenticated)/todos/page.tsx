@@ -6,13 +6,22 @@ import { useState } from "react";
 import { useQuery } from "urql";
 import TodoCard from "./components/TodoCard";
 import CreateTodoModal from "./components/CreateTodoModal";
+import { useRouter } from "next/navigation";
 
 export default function Home() {
   //　登録モーダルオープン
   const [isOpenRegisterModal, setIsOpenRegisterModal] = useState(false);
+  const router = useRouter();
+
   // urql実行
   const [result, reExecuteQuery] = useQuery({ query: GetTodosDocument });
   const { data, fetching, error } = result;
+
+  // 認証エラーの場合はログイン画面にリダイレクト
+  if (error?.graphQLErrors.some((error) => error.message === "Unauthorized")) {
+    router.push("/");
+  }
+
   // データ再取得用関数を作成
   const refetchTodos = async () => {
     reExecuteQuery({ requestPolicy: "network-only" });

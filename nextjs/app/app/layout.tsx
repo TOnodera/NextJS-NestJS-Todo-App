@@ -1,9 +1,9 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
-import { AntdRegistry } from "@ant-design/nextjs-registry";
-import { ConfigProvider, ThemeConfig } from "antd";
+import { ThemeConfig } from "antd";
 import React from "react";
 import "./globals.scss";
+import { AppProvider } from "./components/organizations/AppProvider";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -14,16 +14,14 @@ export const metadata: Metadata = {
 
 //アプリケーション全体のテーマ生成
 const themeConfig: ThemeConfig = {
-  /*
-    token: {
-      colorPrimaryBg: "#c7e3f9",
+  token: {
+    colorPrimaryBg: "#c7e3f9",
+  },
+  components: {
+    Menu: {
+      subMenuItemBg: "#fff",
     },
-    components: {
-      Menu: {
-        subMenuItemBg: "#fff",
-      },
-    },
-    */
+  },
 };
 
 export default function RootLayout({
@@ -38,9 +36,7 @@ export default function RootLayout({
         <meta name="viewport" content="width=device-width" />
       </head>
       <body className={inter.className}>
-        <AntdRegistry>
-          <ConfigProvider theme={themeConfig}>{children}</ConfigProvider>
-        </AntdRegistry>
+        <AppProvider theme={themeConfig}>{children}</AppProvider>
       </body>
     </html>
   );
