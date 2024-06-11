@@ -1,7 +1,7 @@
 "use server";
 import "server-only";
 import { redirect } from "next/navigation";
-import { AccessToken, Credentials, LoginFormErrorType } from "@/app/type";
+import { AccessToken, Credentials, LoginFormStateType } from "@/app/type";
 import { z } from "zod";
 import { post, setAccessToken } from "@/app/utils";
 import { StatusCodes } from "http-status-codes";
@@ -23,14 +23,15 @@ const LoginSchema = z.object({
 });
 
 export const onLoginSubmit = async (
-  _: LoginFormErrorType,
+  _: LoginFormStateType,
   credentials?: Credentials,
-): Promise<LoginFormErrorType> => {
+): Promise<LoginFormStateType> => {
   // バリデーション
   const validatedFields = LoginSchema.safeParse({
     email: credentials?.email,
     password: credentials?.password,
   });
+  console.log(credentials);
   // バリデーションに失敗した場合はエラーメッセージを次の状態として返す
   if (!validatedFields.success) {
     return {
@@ -46,7 +47,7 @@ export const onLoginSubmit = async (
     "/auth/login",
     validatedFields.data,
   );
-  console.log(data, status)
+  console.log(data, status);
   // ログイン失敗時のメッセージ
   if (status !== StatusCodes.OK) {
     return { message: "認証に失敗しました。" };

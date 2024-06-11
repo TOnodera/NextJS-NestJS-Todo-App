@@ -12,15 +12,13 @@ export interface AccessToken {
 }
 
 // ログインエラー型
-export type LoginFormErrorType =
-  | {
-      message: string;
-      errors?: {
-        email?: string[];
-        password?: string[];
-      };
-    }
-  | undefined;
+export type LoginFormStateType = {
+  message?: string;
+  errors?: {
+    email?: string[];
+    password?: string[];
+  };
+};
 
 export type ApiResponse<T> = {
   data: T;
