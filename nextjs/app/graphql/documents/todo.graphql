@@ -1,6 +1,7 @@
 fragment TodoFragment on Todo {
   id
   title
+  status
   description
   createdAt
   updatedAt

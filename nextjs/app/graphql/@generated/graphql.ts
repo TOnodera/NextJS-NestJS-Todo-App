@@ -26,11 +26,19 @@ export type CreateTodoInput = {
   title: Scalars['String']['input'];
 };
 
+export type CreateUserInput = {
+  /** Example field (placeholder) */
+  exampleField: Scalars['Int']['input'];
+};
+
 export type Mutation = {
   __typename?: 'Mutation';
   createTodo: Todo;
+  createUser: User;
   removeTodo: Todo;
+  removeUser: User;
   updateTodo: Todo;
+  updateUser: User;
 };
 
 
@@ -39,7 +47,17 @@ export type MutationCreateTodoArgs = {
 };
 
 
+export type MutationCreateUserArgs = {
+  createUserInput: CreateUserInput;
+};
+
+
 export type MutationRemoveTodoArgs = {
+  id: Scalars['Int']['input'];
+};
+
+
+export type MutationRemoveUserArgs = {
   id: Scalars['Int']['input'];
 };
 
@@ -48,14 +66,25 @@ export type MutationUpdateTodoArgs = {
   updateTodoInput: UpdateTodoInput;
 };
 
+
+export type MutationUpdateUserArgs = {
+  updateUserInput: UpdateUserInput;
+};
+
 export type Query = {
   __typename?: 'Query';
   todo: Todo;
   todos: Array<Todo>;
+  user: User;
 };
 
 
 export type QueryTodoArgs = {
+  id: Scalars['Int']['input'];
+};
+
+
+export type QueryUserArgs = {
   id: Scalars['Int']['input'];
 };
 
@@ -67,6 +96,8 @@ export type Todo = {
   description?: Maybe<Scalars['String']['output']>;
   /** ID */
   id: Scalars['Int']['output'];
+  /** ステータス（DO:未着手、DOING:着手中、DONE:完了) */
+  status: Scalars['String']['output'];
   /** タイトル */
   title: Scalars['String']['output'];
   /** 更新日時 */
@@ -77,11 +108,33 @@ export type UpdateTodoInput = {
   /** 詳細 */
   description?: InputMaybe<Scalars['String']['input']>;
   id: Scalars['Int']['input'];
+  /** ステータス（DO:未着手、DOING:着手中、DONE:完了) */
+  status: Scalars['String']['input'];
   /** タイトル */
   title: Scalars['String']['input'];
 };
 
-export type TodoFragmentFragment = { __typename?: 'Todo', id: number, title: string, description?: string | null, createdAt: any, updatedAt: any } & { ' $fragmentName'?: 'TodoFragmentFragment' };
+export type UpdateUserInput = {
+  /** Example field (placeholder) */
+  exampleField?: InputMaybe<Scalars['Int']['input']>;
+  id: Scalars['Int']['input'];
+};
+
+export type User = {
+  __typename?: 'User';
+  /** 登録日時 */
+  createdAt: Scalars['DateTime']['output'];
+  /** email */
+  email: Scalars['String']['output'];
+  /** ID */
+  id: Scalars['Int']['output'];
+  /** 名前 */
+  name: Scalars['String']['output'];
+  /** 更新日時 */
+  updatedAt: Scalars['DateTime']['output'];
+};
+
+export type TodoFragmentFragment = { __typename?: 'Todo', id: number, title: string, status: string, description?: string | null, createdAt: any, updatedAt: any } & { ' $fragmentName'?: 'TodoFragmentFragment' };
 
 export type CreateTodoMutationVariables = Exact<{
   createTodoInput: CreateTodoInput;
@@ -118,11 +171,11 @@ export type GetTodosQuery = { __typename?: 'Query', todos: Array<(
     & { ' $fragmentRefs'?: { 'TodoFragmentFragment': TodoFragmentFragment } }
   )> };
 
-export const TodoFragmentFragmentDoc = {"kind":"Document","definitions":[{"kind":"FragmentDefinition","name":{"kind":"Name","value":"TodoFragment"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"Todo"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"title"}},{"kind":"Field","name":{"kind":"Name","value":"description"}},{"kind":"Field","name":{"kind":"Name","value":"createdAt"}},{"kind":"Field","name":{"kind":"Name","value":"updatedAt"}}]}}]} as unknown as DocumentNode<TodoFragmentFragment, unknown>;
-export const CreateTodoDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"CreateTodo"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"createTodoInput"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"CreateTodoInput"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"createTodo"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"createTodoInput"},"value":{"kind":"Variable","name":{"kind":"Name","value":"createTodoInput"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"TodoFragment"}}]}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"TodoFragment"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"Todo"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"title"}},{"kind":"Field","name":{"kind":"Name","value":"description"}},{"kind":"Field","name":{"kind":"Name","value":"createdAt"}},{"kind":"Field","name":{"kind":"Name","value":"updatedAt"}}]}}]} as unknown as DocumentNode<CreateTodoMutation, CreateTodoMutationVariables>;
-export const UpdateTodoDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"UpdateTodo"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"updateTodoInput"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"UpdateTodoInput"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"updateTodo"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"updateTodoInput"},"value":{"kind":"Variable","name":{"kind":"Name","value":"updateTodoInput"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"TodoFragment"}}]}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"TodoFragment"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"Todo"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"title"}},{"kind":"Field","name":{"kind":"Name","value":"description"}},{"kind":"Field","name":{"kind":"Name","value":"createdAt"}},{"kind":"Field","name":{"kind":"Name","value":"updatedAt"}}]}}]} as unknown as DocumentNode<UpdateTodoMutation, UpdateTodoMutationVariables>;
+export const TodoFragmentFragmentDoc = {"kind":"Document","definitions":[{"kind":"FragmentDefinition","name":{"kind":"Name","value":"TodoFragment"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"Todo"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"title"}},{"kind":"Field","name":{"kind":"Name","value":"status"}},{"kind":"Field","name":{"kind":"Name","value":"description"}},{"kind":"Field","name":{"kind":"Name","value":"createdAt"}},{"kind":"Field","name":{"kind":"Name","value":"updatedAt"}}]}}]} as unknown as DocumentNode<TodoFragmentFragment, unknown>;
+export const CreateTodoDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"CreateTodo"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"createTodoInput"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"CreateTodoInput"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"createTodo"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"createTodoInput"},"value":{"kind":"Variable","name":{"kind":"Name","value":"createTodoInput"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"TodoFragment"}}]}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"TodoFragment"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"Todo"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"title"}},{"kind":"Field","name":{"kind":"Name","value":"status"}},{"kind":"Field","name":{"kind":"Name","value":"description"}},{"kind":"Field","name":{"kind":"Name","value":"createdAt"}},{"kind":"Field","name":{"kind":"Name","value":"updatedAt"}}]}}]} as unknown as DocumentNode<CreateTodoMutation, CreateTodoMutationVariables>;
+export const UpdateTodoDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"UpdateTodo"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"updateTodoInput"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"UpdateTodoInput"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"updateTodo"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"updateTodoInput"},"value":{"kind":"Variable","name":{"kind":"Name","value":"updateTodoInput"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"TodoFragment"}}]}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"TodoFragment"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"Todo"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"title"}},{"kind":"Field","name":{"kind":"Name","value":"status"}},{"kind":"Field","name":{"kind":"Name","value":"description"}},{"kind":"Field","name":{"kind":"Name","value":"createdAt"}},{"kind":"Field","name":{"kind":"Name","value":"updatedAt"}}]}}]} as unknown as DocumentNode<UpdateTodoMutation, UpdateTodoMutationVariables>;
 export const RemoveTodoDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"RemoveTodo"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"id"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"removeTodo"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"id"},"value":{"kind":"Variable","name":{"kind":"Name","value":"id"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}}]}}]}}]} as unknown as DocumentNode<RemoveTodoMutation, RemoveTodoMutationVariables>;
-export const GetTodosDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetTodos"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"todos"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"TodoFragment"}}]}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"TodoFragment"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"Todo"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"title"}},{"kind":"Field","name":{"kind":"Name","value":"description"}},{"kind":"Field","name":{"kind":"Name","value":"createdAt"}},{"kind":"Field","name":{"kind":"Name","value":"updatedAt"}}]}}]} as unknown as DocumentNode<GetTodosQuery, GetTodosQueryVariables>;
+export const GetTodosDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetTodos"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"todos"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"TodoFragment"}}]}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"TodoFragment"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"Todo"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"title"}},{"kind":"Field","name":{"kind":"Name","value":"status"}},{"kind":"Field","name":{"kind":"Name","value":"description"}},{"kind":"Field","name":{"kind":"Name","value":"createdAt"}},{"kind":"Field","name":{"kind":"Name","value":"updatedAt"}}]}}]} as unknown as DocumentNode<GetTodosQuery, GetTodosQueryVariables>;
 /** All built-in and custom scalars, mapped to their actual values */
 export type Scalars = {
   ID: { input: string; output: string; }
@@ -141,11 +194,19 @@ export type CreateTodoInput = {
   title: Scalars['String']['input'];
 };
 
+export type CreateUserInput = {
+  /** Example field (placeholder) */
+  exampleField: Scalars['Int']['input'];
+};
+
 export type Mutation = {
   __typename?: 'Mutation';
   createTodo: Todo;
+  createUser: User;
   removeTodo: Todo;
+  removeUser: User;
   updateTodo: Todo;
+  updateUser: User;
 };
 
 
@@ -154,7 +215,17 @@ export type MutationCreateTodoArgs = {
 };
 
 
+export type MutationCreateUserArgs = {
+  createUserInput: CreateUserInput;
+};
+
+
 export type MutationRemoveTodoArgs = {
+  id: Scalars['Int']['input'];
+};
+
+
+export type MutationRemoveUserArgs = {
   id: Scalars['Int']['input'];
 };
 
@@ -163,14 +234,25 @@ export type MutationUpdateTodoArgs = {
   updateTodoInput: UpdateTodoInput;
 };
 
+
+export type MutationUpdateUserArgs = {
+  updateUserInput: UpdateUserInput;
+};
+
 export type Query = {
   __typename?: 'Query';
   todo: Todo;
   todos: Array<Todo>;
+  user: User;
 };
 
 
 export type QueryTodoArgs = {
+  id: Scalars['Int']['input'];
+};
+
+
+export type QueryUserArgs = {
   id: Scalars['Int']['input'];
 };
 
@@ -182,6 +264,8 @@ export type Todo = {
   description?: Maybe<Scalars['String']['output']>;
   /** ID */
   id: Scalars['Int']['output'];
+  /** ステータス（DO:未着手、DOING:着手中、DONE:完了) */
+  status: Scalars['String']['output'];
   /** タイトル */
   title: Scalars['String']['output'];
   /** 更新日時 */
@@ -192,14 +276,37 @@ export type UpdateTodoInput = {
   /** 詳細 */
   description?: InputMaybe<Scalars['String']['input']>;
   id: Scalars['Int']['input'];
+  /** ステータス（DO:未着手、DOING:着手中、DONE:完了) */
+  status: Scalars['String']['input'];
   /** タイトル */
   title: Scalars['String']['input'];
+};
+
+export type UpdateUserInput = {
+  /** Example field (placeholder) */
+  exampleField?: InputMaybe<Scalars['Int']['input']>;
+  id: Scalars['Int']['input'];
+};
+
+export type User = {
+  __typename?: 'User';
+  /** 登録日時 */
+  createdAt: Scalars['DateTime']['output'];
+  /** email */
+  email: Scalars['String']['output'];
+  /** ID */
+  id: Scalars['Int']['output'];
+  /** 名前 */
+  name: Scalars['String']['output'];
+  /** 更新日時 */
+  updatedAt: Scalars['DateTime']['output'];
 };
 
 export const TodoFragment = gql`
     fragment TodoFragment on Todo {
   id
   title
+  status
   description
   createdAt
   updatedAt

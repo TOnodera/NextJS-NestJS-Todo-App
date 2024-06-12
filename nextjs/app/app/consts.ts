@@ -1,7 +1,7 @@
 export const TODO_TASK_STATUS = {
-  DO: 1,
-  DOING: 2,
-  DONE: 3,
+  DO: "DO",
+  DOING: "DOING",
+  DONE: "DONE",
 } as const;
 export type TODO_TASK_STATUS = (typeof TODO_TASK_STATUS)[keyof typeof TODO_TASK_STATUS];
 

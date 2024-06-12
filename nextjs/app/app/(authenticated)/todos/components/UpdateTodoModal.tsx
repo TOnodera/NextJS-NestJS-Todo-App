@@ -61,12 +61,14 @@ export default function UpdateTodoModal({ onCancel, afterMutation, todo, isOpen 
         <Form.Item label="タスク詳細" name="description">
           <Input.TextArea name="description" value={todoFragment.description ?? undefined} />
         </Form.Item>
-        <Form.Item style={{ textAlign: "right" }}>
-          {STATUSES.map((status, idx) => (
-            <Radio.Button name="status" key={idx} value={status.status}>
-              {status.name}
-            </Radio.Button>
-          ))}
+        <Form.Item name="status" style={{ textAlign: "right" }}>
+          <Radio.Group defaultValue={todoFragment.status}>
+            {STATUSES.map((status, idx) => (
+              <Radio.Button key={idx} value={status.status}>
+                {status.name}
+              </Radio.Button>
+            ))}
+          </Radio.Group>
         </Form.Item>
         <Form.Item style={{ textAlign: "right" }}>
           <Button type="primary" htmlType="submit" ghost style={{ marginRight: "1rem" }}>

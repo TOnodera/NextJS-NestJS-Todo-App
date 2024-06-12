@@ -3,6 +3,7 @@ import { IsNotEmpty, IsOptional } from 'class-validator';
 
 @InputType()
 export class CreateTodoInput {
+  @IsNotEmpty()
   @Field(() => String, { description: 'タイトル' })
   title: string;
 

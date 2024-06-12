@@ -29,15 +29,6 @@ export default function TodoCard({ todo, afterMutation }: Props) {
           <Col>
             <Title level={3}>{todoFragment.title}</Title>
           </Col>
-          <Col>
-            <Radio.Group>
-              {STATUSES.map((status, idx) => (
-                <Radio.Button key={idx} value={status.status}>
-                  {status.name}
-                </Radio.Button>
-              ))}
-            </Radio.Group>
-          </Col>
         </Row>
         <Row>
           <Col>{todoFragment.description}</Col>

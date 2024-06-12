@@ -1,4 +1,5 @@
 import { ObjectType, Field, Int } from '@nestjs/graphql';
+import { Status } from '@prisma/client';
 import { IsNotEmpty } from 'class-validator';
 
 @ObjectType()
@@ -12,6 +13,11 @@ export class Todo {
 
   @Field(() => String, { description: '詳細', nullable: true })
   description?: string;
+
+  @Field(() => String, {
+    description: 'ステータス（DO:未着手、DOING:着手中、DONE:完了)',
+  })
+  status: Status;
 
   @Field({ description: '登録日時' })
   createdAt: Date;

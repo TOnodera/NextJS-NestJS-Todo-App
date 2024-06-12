@@ -12,6 +12,9 @@ type Todo {
   """詳細"""
   description: String
 
+  """ステータス（DO:未着手、DOING:着手中、DONE:完了)"""
+  status: String!
+
   """登録日時"""
   createdAt: DateTime!
 
@@ -69,6 +72,9 @@ input UpdateTodoInput {
 
   """タイトル"""
   title: String!
+
+  """ステータス（DO:未着手、DOING:着手中、DONE:完了)"""
+  status: String!
 
   """詳細"""
   description: String

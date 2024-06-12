@@ -1,8 +1,12 @@
+-- CreateEnum
+CREATE TYPE "Status" AS ENUM ('DO', 'DOING', 'DONE');
+
 -- CreateTable
 CREATE TABLE "todos" (
     "id" SERIAL NOT NULL,
     "title" TEXT NOT NULL,
     "description" TEXT,
+    "status" "Status" NOT NULL DEFAULT 'DO',
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updated_at" TIMESTAMP(3) NOT NULL,
 
