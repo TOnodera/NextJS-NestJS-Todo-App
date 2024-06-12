@@ -27,6 +27,14 @@ export default function Home() {
     reExecuteQuery({ requestPolicy: "network-only" });
   };
 
+  // 新規登録ボタン押下後の処理
+  const afterRegisterSubmit = async () => {
+    // データ再取得
+    await refetchTodos();
+    // モーダルクローズ
+    setIsOpenRegisterModal(false);
+  };
+
   return (
     <div style={{ height: "100%" }}>
       <Row justify="center" style={{ height: "10%" }}>
@@ -35,10 +43,7 @@ export default function Home() {
             <PlusSquareOutlined />
             登録
           </Button>
-          <CreateTodoModal
-            isOpen={isOpenRegisterModal}
-            onCancel={() => setIsOpenRegisterModal(false)}
-          />
+          <CreateTodoModal isOpen={isOpenRegisterModal} afterSubmit={afterRegisterSubmit} />
         </Col>
       </Row>
       <div style={{ height: "90%", overflowY: "auto" }}>

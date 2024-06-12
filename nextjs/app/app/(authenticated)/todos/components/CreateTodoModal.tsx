@@ -6,9 +6,9 @@ const { Title } = Typography;
 
 interface Props {
   isOpen: boolean;
-  onCancel: () => void;
+  afterSubmit: () => Promise<void>;
 }
-export default function CreateTodoModal({ isOpen, onCancel }: Props) {
+export default function CreateTodoModal({ isOpen, afterSubmit }: Props) {
   // 登録押下時のハンドラ
   const [_, createTodo] = useMutation(CreateTodoDocument);
   const onSubmitHandler = async (createTodoInput: CreateTodoInput) => {
@@ -16,13 +16,13 @@ export default function CreateTodoModal({ isOpen, onCancel }: Props) {
   };
 
   return (
-    <Modal open={isOpen} onCancel={onCancel} footer={null}>
+    <Modal open={isOpen} onCancel={afterSubmit} footer={null}>
       <Title level={4}>新規タスク登録</Title>
       <Form
         style={{ marginTop: "2rem" }}
         onFinish={async (createTodoInput: CreateTodoInput) => {
           await onSubmitHandler(createTodoInput);
-          onCancel();
+          await afterSubmit();
         }}
       >
         <Form.Item
