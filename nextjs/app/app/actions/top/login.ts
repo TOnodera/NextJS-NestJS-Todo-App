@@ -31,7 +31,6 @@ export const onLoginSubmit = async (
     email: credentials?.email,
     password: credentials?.password,
   });
-  console.log(credentials);
   // バリデーションに失敗した場合はエラーメッセージを次の状態として返す
   if (!validatedFields.success) {
     return {
@@ -47,7 +46,6 @@ export const onLoginSubmit = async (
     "/auth/login",
     validatedFields.data,
   );
-  console.log(data, status);
   // ログイン失敗時のメッセージ
   if (status !== StatusCodes.OK) {
     return { message: "認証に失敗しました。" };

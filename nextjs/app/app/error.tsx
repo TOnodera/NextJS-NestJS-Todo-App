@@ -1,21 +1,27 @@
 "use client";
-import { useEffect } from "react";
+import { Button, Card, Col, Row } from "antd";
+import { Typography } from "antd";
 
+const { Title } = Typography;
 export default function Error({
-  error,
   reset,
 }: {
   error: Error & { digest?: string };
   reset: () => void;
 }) {
-  useEffect(() => {
-    console.error(error);
-  }, [error]);
-
   return (
-    <div>
-      <h2>エラーです</h2>
-      <button onClick={() => reset()}>再レンダリング</button>
-    </div>
+    <Row justify="center" align="middle" style={{ minHeight: "100vh" }}>
+      <Col>
+        <Card>
+          <Title level={4}>サーバーエラー</Title>
+          <p>
+            サーバーエラーが発生しました。リクエストボタンを押すか、しばらく時間をあけてからアクセスしてください。
+          </p>
+          <Button onClick={reset} type="primary">
+            リクエスト
+          </Button>
+        </Card>
+      </Col>
+    </Row>
   );
 }

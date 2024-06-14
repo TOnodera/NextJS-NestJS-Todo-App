@@ -49,6 +49,7 @@ export default async function RootLayout({
                   width: "100%",
                   marginTop: "1rem",
                   height: "100%",
+                  margin: "0 auto",
                 }}
               >
                 {children}
