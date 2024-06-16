@@ -17,22 +17,22 @@ export class TodoResolver {
   }
 
   @Query(() => [Todo], { name: 'todos' })
-  findAll() {
-    return this.todoService.findAll();
+  async findAll() {
+    return await this.todoService.findAll();
   }
 
   @Query(() => Todo, { name: 'todo' })
-  findOne(@Args('id', { type: () => Int }) id: number) {
-    return this.todoService.findOne(id);
+  async findOne(@Args('id', { type: () => Int }) id: number) {
+    return await this.todoService.findOne(id);
   }
 
   @Mutation(() => Todo)
-  updateTodo(@Args('updateTodoInput') updateTodoInput: UpdateTodoInput) {
-    return this.todoService.update(updateTodoInput.id, updateTodoInput);
+  async updateTodo(@Args('updateTodoInput') updateTodoInput: UpdateTodoInput) {
+    return await this.todoService.update(updateTodoInput.id, updateTodoInput);
   }
 
   @Mutation(() => Todo)
-  removeTodo(@Args('id', { type: () => Int }) id: number) {
-    return this.todoService.remove(id);
+  async removeTodo(@Args('id', { type: () => Int }) id: number) {
+    return await this.todoService.remove(id);
   }
 }

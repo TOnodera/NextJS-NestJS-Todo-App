@@ -16,24 +16,33 @@ import CreateTodoModal from "./components/CreateTodoModal";
 import { useRouter } from "next/navigation";
 import { useFragment } from "@/graphql/@generated";
 import TodoCard from "./components/TodoCard";
+import Notification from "@/app/components/atoms/Notification";
 
 export default function Home() {
   // ルーター取得
   const router = useRouter();
-  // urql実行
+  // エラー用テキスト
+  const [errorText, setErrorText] = useState<string | undefined>(undefined);
+  //　登録モーダルオープン
+  const [isOpenRegisterModal, setIsOpenRegisterModal] = useState(false);
+
+  /**
+   * データ取得処理実行
+   */
   const [result, reExecuteQuery] = useQuery({ query: GetTodosDocument });
   const { data, fetching, error } = result;
+  if (error) {
+    setErrorText("データの取得に失敗しました");
+  }
   // 認証エラーの場合はログイン画面にリダイレクト
   if (error?.graphQLErrors.some((error) => error.message === "Unauthorized")) {
     router.push("/");
   }
   // 型をつける
   const todoFragments = useFragment(TodoFragmentFragmentDoc, data?.todos);
-  //　登録モーダルオープン
-  const [isOpenRegisterModal, setIsOpenRegisterModal] = useState(false);
 
   /**
-   * データ再取得（キャッシュからではなくネットワークから取得）
+   * データ再取得関数定義（キャッシュからではなくネットワークから取得）
    */
   const reFetch = () => {
     reExecuteQuery({ requestPolicy: "network-only" });
@@ -44,7 +53,11 @@ export default function Home() {
   const [_, createTodo] = useMutation(CreateTodoDocument);
   const onCreateTodoHandler = (createTodoInput: CreateTodoInput) => {
     createTodo({ createTodoInput })
-      .then(() => {
+      .then((res) => {
+        if (res.error) {
+          setErrorText("登録に失敗しました");
+          return;
+        }
         // データ再取得
         reFetch();
       })
@@ -58,19 +71,33 @@ export default function Home() {
    */
   const [updateTodoResult, updateTodo] = useMutation(UpdateTodoDocument);
   const onUpdateTodoHandler = (updateTodoInput: UpdateTodoInput) => {
-    updateTodo({ updateTodoInput }).then(() => reFetch());
+    updateTodo({ updateTodoInput }).then((res) => {
+      if (res.error) {
+        setErrorText("更新に失敗しました");
+        return;
+      }
+      reFetch();
+    });
   };
   /**
    * 削除処理
    */
   const [deleteTodoResult, removeTodo] = useMutation(RemoveTodoDocument);
   const onDeleteTodoHandler = (id: number) => {
-    removeTodo({ id }).then(() => reFetch());
+    removeTodo({ id }).then((res) => {
+      if (res.error) {
+        setErrorText("削除に失敗しました");
+        console.log(res.error);
+        return;
+      }
+      reFetch();
+    });
   };
 
   return (
     <div style={{ height: "100%" }}>
-      <Row justify="center" style={{ height: "10%" }}>
+      {/*<Notification message="エラーが発生しました" description={errorText} />*/}
+      <Row justify="center">
         <Col xs={24} md={20} xl={16} style={{ marginBottom: "1rem" }}>
           <Button type="primary" onClick={() => setIsOpenRegisterModal(true)}>
             <PlusSquareOutlined />

@@ -9,7 +9,7 @@ import Header from "../components/organizations/Header";
 import Footer from "../components/organizations/Footer";
 import { getAccessToken } from "../utils";
 import { redirect } from "next/navigation";
-import UrqlProvider from "../components/atoms/UrqlProvider";
+import UrqlProvider from "../components/organizations/UrqlProvider";
 
 export const metadata: Metadata = {
   title: "Todoアプリケーション",

@@ -15,10 +15,10 @@ export default function Error({
         <Card>
           <Title level={4}>サーバーエラー</Title>
           <p>
-            サーバーエラーが発生しました。リクエストボタンを押すか、しばらく時間をあけてからアクセスしてください。
+            サーバーエラーが発生しました。「再表示」を押すかしばらく時間をあけてからアクセスしてください。
           </p>
           <Button onClick={reset} type="primary">
-            リクエスト
+            再表示
           </Button>
         </Card>
       </Col>
