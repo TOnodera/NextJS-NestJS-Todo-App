@@ -1,38 +1,71 @@
 "use client";
-import { GetTodosDocument } from "@/graphql/@generated/graphql";
+import {
+  CreateTodoDocument,
+  CreateTodoInput,
+  GetTodosDocument,
+  RemoveTodoDocument,
+  TodoFragmentFragmentDoc,
+  UpdateTodoDocument,
+  UpdateTodoInput,
+} from "@/graphql/@generated/graphql";
 import { PlusSquareOutlined } from "@ant-design/icons";
 import { Button, Col, Row, Skeleton } from "antd";
 import { useState } from "react";
-import { useQuery } from "urql";
-import TodoCard from "./components/TodoCard";
+import { useMutation, useQuery } from "urql";
 import CreateTodoModal from "./components/CreateTodoModal";
 import { useRouter } from "next/navigation";
+import { useFragment } from "@/graphql/@generated";
+import TodoCard from "./components/TodoCard";
 
 export default function Home() {
-  //　登録モーダルオープン
-  const [isOpenRegisterModal, setIsOpenRegisterModal] = useState(false);
+  // ルーター取得
   const router = useRouter();
-
   // urql実行
   const [result, reExecuteQuery] = useQuery({ query: GetTodosDocument });
   const { data, fetching, error } = result;
-
   // 認証エラーの場合はログイン画面にリダイレクト
   if (error?.graphQLErrors.some((error) => error.message === "Unauthorized")) {
     router.push("/");
   }
+  // 型をつける
+  const todoFragments = useFragment(TodoFragmentFragmentDoc, data?.todos);
+  //　登録モーダルオープン
+  const [isOpenRegisterModal, setIsOpenRegisterModal] = useState(false);
 
-  // データ再取得用関数を作成
-  const refetchTodos = async () => {
+  /**
+   * データ再取得（キャッシュからではなくネットワークから取得）
+   */
+  const reFetch = () => {
     reExecuteQuery({ requestPolicy: "network-only" });
   };
-
-  // 新規登録ボタン押下後の処理
-  const afterRegisterSubmit = async () => {
-    // データ再取得
-    await refetchTodos();
-    // モーダルクローズ
-    setIsOpenRegisterModal(false);
+  /**
+   * 登録処理
+   */
+  const [_, createTodo] = useMutation(CreateTodoDocument);
+  const onCreateTodoHandler = (createTodoInput: CreateTodoInput) => {
+    createTodo({ createTodoInput })
+      .then(() => {
+        // データ再取得
+        reFetch();
+      })
+      .finally(() => {
+        // モーダルクローズ
+        setIsOpenRegisterModal(false);
+      });
+  };
+  /**
+   * 更新処理
+   */
+  const [updateTodoResult, updateTodo] = useMutation(UpdateTodoDocument);
+  const onUpdateTodoHandler = (updateTodoInput: UpdateTodoInput) => {
+    updateTodo({ updateTodoInput }).then(() => reFetch());
+  };
+  /**
+   * 削除処理
+   */
+  const [deleteTodoResult, removeTodo] = useMutation(RemoveTodoDocument);
+  const onDeleteTodoHandler = (id: number) => {
+    removeTodo({ id }).then(() => reFetch());
   };
 
   return (
@@ -43,16 +76,24 @@ export default function Home() {
             <PlusSquareOutlined />
             登録
           </Button>
-          <CreateTodoModal isOpen={isOpenRegisterModal} afterSubmit={afterRegisterSubmit} />
+          <CreateTodoModal
+            isOpen={isOpenRegisterModal}
+            onCancel={() => setIsOpenRegisterModal(false)}
+            onCreateTodoHandler={onCreateTodoHandler}
+          />
         </Col>
       </Row>
       <div style={{ height: "90%", overflowY: "auto" }}>
         <Skeleton loading={fetching} active paragraph={{ rows: 8 }}>
           <Row justify="center">
             <Col xs={24} md={20} xl={16}>
-              {data?.todos.map((todo, idx) => (
+              {todoFragments?.map((todo, idx) => (
                 <div key={idx} style={{ marginBottom: "1rem", cursor: "pointer" }}>
-                  <TodoCard todo={todo} afterMutation={refetchTodos} />
+                  <TodoCard
+                    onUpdateTodoHandler={onUpdateTodoHandler}
+                    onDeleteTodoHandler={onDeleteTodoHandler}
+                    todo={todo}
+                  />
                 </div>
               ))}
             </Col>

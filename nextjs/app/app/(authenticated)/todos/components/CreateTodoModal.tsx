@@ -1,29 +1,21 @@
-import { CreateTodoDocument, CreateTodoInput } from "@/graphql/@generated/graphql";
+import { CreateTodoInput } from "@/graphql/@generated/graphql";
 import { Button, Form, Input, Modal, Typography } from "antd";
-import { useMutation } from "urql";
 
 const { Title } = Typography;
 
 interface Props {
   isOpen: boolean;
-  afterSubmit: () => Promise<void>;
+  onCreateTodoHandler: (createTodoInput: CreateTodoInput) => void;
+  onCancel: ()=>void;
 }
-export default function CreateTodoModal({ isOpen, afterSubmit }: Props) {
-  // 登録押下時のハンドラ
-  const [_, createTodo] = useMutation(CreateTodoDocument);
-  const onSubmitHandler = async (createTodoInput: CreateTodoInput) => {
-    await createTodo({ createTodoInput });
-  };
-
+export default function CreateTodoModal({ isOpen, onCreateTodoHandler, onCancel }: Props) {
   return (
-    <Modal open={isOpen} onCancel={afterSubmit} footer={null}>
+    <Modal open={isOpen} footer={null} onCancel={onCancel}>
       <Title level={4}>新規タスク登録</Title>
       <Form
+        initialValues={{ title: "", description: "" }}
         style={{ marginTop: "2rem" }}
-        onFinish={async (createTodoInput: CreateTodoInput) => {
-          await onSubmitHandler(createTodoInput);
-          await afterSubmit();
-        }}
+        onFinish={onCreateTodoHandler}
       >
         <Form.Item
           label="タイトル"
