@@ -81,12 +81,30 @@ input UpdateTodoInput {
 }
 
 input CreateUserInput {
-  """Example field (placeholder)"""
-  exampleField: Int!
+  """名前"""
+  name: String!
+
+  """メールアドレス"""
+  email: String!
+
+  """パスワード"""
+  password: String!
+
+  """ロールID"""
+  roleId: String!
 }
 
 input UpdateUserInput {
-  """Example field (placeholder)"""
-  exampleField: Int
+  """名前"""
+  name: String
+
+  """メールアドレス"""
+  email: String
+
+  """パスワード"""
+  password: String
+
+  """ロールID"""
+  roleId: String
   id: Int!
 }

@@ -29,6 +29,15 @@ model users {
   password  String
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
+  role      roles[]
+}
+
+model roles {
+  id        String   @id
+  name      String   @unique
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+  user      users[]
 }
 
 enum Status {
