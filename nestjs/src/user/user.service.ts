@@ -13,7 +13,7 @@ export class UserService {
         name: createUserInput.name,
         email: createUserInput.email,
         password: createUserInput.password,
-        role: { connect: [{ id: createUserInput.roleId }] },
+        role: { connect: { id: createUserInput.roleId } },
       },
     });
   }

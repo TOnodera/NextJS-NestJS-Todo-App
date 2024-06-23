@@ -27,12 +27,18 @@ async function main() {
   const hashedPassword = await hash('password', HASH_ROUND);
   await prisma.users.create({
     data: {
-      name: 'user1',
-      email: 'user1@example.com',
+      name: 'admin-user',
+      email: 'admin-user@example.com',
       password: hashedPassword,
-      role: {
-        connect: [{ id: Role.ADMIN }],
-      },
+      role: { connect: { id: Role.ADMIN } },
+    },
+  });
+  await prisma.users.create({
+    data: {
+      name: 'normal-user',
+      email: 'normal-user@example.com',
+      password: hashedPassword,
+      role: { connect: { id: Role.USER } },
     },
   });
 }
