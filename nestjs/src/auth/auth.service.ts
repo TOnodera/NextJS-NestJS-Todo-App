@@ -11,6 +11,9 @@ export class AuthService {
   ) {}
   async login(email: string, pass: string): Promise<{ accessToken: string }> {
     const user = await this.userService.findByEmail(email);
+    if (!user) {
+      throw new UnauthorizedException();
+    }
     if (await compare(user?.password, pass)) {
       throw new UnauthorizedException();
     }

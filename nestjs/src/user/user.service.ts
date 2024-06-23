@@ -6,8 +6,16 @@ import { PrismaService } from 'src/prisma/prisma.service';
 @Injectable()
 export class UserService {
   constructor(private readonly prismaService: PrismaService) {}
-  create(createUserInput: CreateUserInput) {
-    return 'This action adds a new user';
+
+  async create(createUserInput: CreateUserInput) {
+    return await this.prismaService.users.create({
+      data: {
+        name: createUserInput.name,
+        email: createUserInput.email,
+        password: createUserInput.password,
+        role: { connect: { id: createUserInput.roleId } },
+      },
+    });
   }
 
   findAll() {
@@ -15,7 +23,10 @@ export class UserService {
   }
 
   async findOne(id: number) {
-    return await this.prismaService.users.findUnique({ where: { id } });
+    return await this.prismaService.users.findUnique({
+      where: { id },
+      include: { role: true },
+    });
   }
 
   async findByEmail(email: string) {
