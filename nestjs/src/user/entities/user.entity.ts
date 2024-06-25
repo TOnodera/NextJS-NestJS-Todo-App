@@ -14,6 +14,9 @@ export class User {
   @IsEmail()
   email: string;
 
+  @Field(() => String, { description: 'ロールID' })
+  roleId: string;
+
   @Field(() => Date, { description: '登録日時' })
   @IsDateString()
   createdAt: Date;

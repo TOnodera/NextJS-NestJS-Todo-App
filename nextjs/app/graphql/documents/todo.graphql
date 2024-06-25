@@ -30,3 +30,24 @@ query GetTodos {
     ...TodoFragment
   }
 }
+
+fragment User on User {
+  id
+  name
+  email
+  roleId
+  createdAt
+  updatedAt
+}
+
+query GetUsers {
+  users {
+    ...User
+  }
+}
+
+mutation CreateUser($createUserInput: CreateUserInput!) {
+  createUser(createUserInput: $createUserInput) {
+    ...User
+  }
+}

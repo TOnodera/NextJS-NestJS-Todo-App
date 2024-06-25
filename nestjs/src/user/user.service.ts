@@ -2,13 +2,14 @@ import { Injectable } from '@nestjs/common';
 import { CreateUserInput } from './dto/create-user.input';
 import { UpdateUserInput } from './dto/update-user.input';
 import { PrismaService } from 'src/prisma/prisma.service';
+import { UserWithoutPassword } from 'src/type';
 
 @Injectable()
 export class UserService {
   constructor(private readonly prismaService: PrismaService) {}
 
-  async create(createUserInput: CreateUserInput) {
-    return await this.prismaService.users.create({
+  async create(createUserInput: CreateUserInput): Promise<UserWithoutPassword> {
+    const { password, ...result } = await this.prismaService.users.create({
       data: {
         name: createUserInput.name,
         email: createUserInput.email,
@@ -16,10 +17,11 @@ export class UserService {
         role: { connect: { id: createUserInput.roleId } },
       },
     });
+    return result;
   }
 
-  findAll() {
-    return `This action returns all user`;
+  async findAll() {
+    return await this.prismaService.users.findMany({ include: { role: true } });
   }
 
   async findOne(id: number) {
@@ -30,14 +32,20 @@ export class UserService {
   }
 
   async findByEmail(email: string) {
-    return await this.prismaService.users.findUnique({ where: { email } });
+    return await this.prismaService.users.findUnique({
+      where: { email },
+      include: { role: true },
+    });
   }
 
-  update(id: number, updateUserInput: UpdateUserInput) {
-    return `This action updates a #${id} user`;
+  async update(id: number, updateUserInput: UpdateUserInput) {
+    return await this.prismaService.users.update({
+      where: { id },
+      data: { ...updateUserInput },
+    });
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} user`;
+  async remove(id: number) {
+    await this.prismaService.users.delete({ where: { id } });
   }
 }

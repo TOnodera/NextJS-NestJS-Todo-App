@@ -37,6 +37,9 @@ type User {
   """email"""
   email: String!
 
+  """ロールID"""
+  roleId: String!
+
   """登録日時"""
   createdAt: DateTime!
 
@@ -47,6 +50,7 @@ type User {
 type Query {
   todos: [Todo!]!
   todo(id: Int!): Todo!
+  users: [User!]!
   user(id: Int!): User!
 }
 
@@ -96,15 +100,15 @@ input CreateUserInput {
 
 input UpdateUserInput {
   """名前"""
-  name: String
+  name: String!
 
   """メールアドレス"""
-  email: String
+  email: String!
 
   """パスワード"""
   password: String
 
   """ロールID"""
-  roleId: String
+  roleId: String!
   id: Int!
 }

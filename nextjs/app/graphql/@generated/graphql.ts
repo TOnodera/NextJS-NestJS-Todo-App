@@ -27,8 +27,14 @@ export type CreateTodoInput = {
 };
 
 export type CreateUserInput = {
-  /** Example field (placeholder) */
-  exampleField: Scalars['Int']['input'];
+  /** メールアドレス */
+  email: Scalars['String']['input'];
+  /** 名前 */
+  name: Scalars['String']['input'];
+  /** パスワード */
+  password: Scalars['String']['input'];
+  /** ロールID */
+  roleId: Scalars['String']['input'];
 };
 
 export type Mutation = {
@@ -76,6 +82,7 @@ export type Query = {
   todo: Todo;
   todos: Array<Todo>;
   user: User;
+  users: Array<User>;
 };
 
 
@@ -115,9 +122,15 @@ export type UpdateTodoInput = {
 };
 
 export type UpdateUserInput = {
-  /** Example field (placeholder) */
-  exampleField?: InputMaybe<Scalars['Int']['input']>;
+  /** メールアドレス */
+  email: Scalars['String']['input'];
   id: Scalars['Int']['input'];
+  /** 名前 */
+  name: Scalars['String']['input'];
+  /** パスワード */
+  password?: InputMaybe<Scalars['String']['input']>;
+  /** ロールID */
+  roleId: Scalars['String']['input'];
 };
 
 export type User = {
@@ -130,6 +143,8 @@ export type User = {
   id: Scalars['Int']['output'];
   /** 名前 */
   name: Scalars['String']['output'];
+  /** ロールID */
+  roleId: Scalars['String']['output'];
   /** 更新日時 */
   updatedAt: Scalars['DateTime']['output'];
 };
@@ -171,11 +186,34 @@ export type GetTodosQuery = { __typename?: 'Query', todos: Array<(
     & { ' $fragmentRefs'?: { 'TodoFragmentFragment': TodoFragmentFragment } }
   )> };
 
+export type UserFragment = { __typename?: 'User', id: number, name: string, email: string, roleId: string, createdAt: any, updatedAt: any } & { ' $fragmentName'?: 'UserFragment' };
+
+export type GetUsersQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GetUsersQuery = { __typename?: 'Query', users: Array<(
+    { __typename?: 'User' }
+    & { ' $fragmentRefs'?: { 'UserFragment': UserFragment } }
+  )> };
+
+export type CreateUserMutationVariables = Exact<{
+  createUserInput: CreateUserInput;
+}>;
+
+
+export type CreateUserMutation = { __typename?: 'Mutation', createUser: (
+    { __typename?: 'User' }
+    & { ' $fragmentRefs'?: { 'UserFragment': UserFragment } }
+  ) };
+
 export const TodoFragmentFragmentDoc = {"kind":"Document","definitions":[{"kind":"FragmentDefinition","name":{"kind":"Name","value":"TodoFragment"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"Todo"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"title"}},{"kind":"Field","name":{"kind":"Name","value":"status"}},{"kind":"Field","name":{"kind":"Name","value":"description"}},{"kind":"Field","name":{"kind":"Name","value":"createdAt"}},{"kind":"Field","name":{"kind":"Name","value":"updatedAt"}}]}}]} as unknown as DocumentNode<TodoFragmentFragment, unknown>;
+export const UserFragmentDoc = {"kind":"Document","definitions":[{"kind":"FragmentDefinition","name":{"kind":"Name","value":"User"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"User"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"email"}},{"kind":"Field","name":{"kind":"Name","value":"roleId"}},{"kind":"Field","name":{"kind":"Name","value":"createdAt"}},{"kind":"Field","name":{"kind":"Name","value":"updatedAt"}}]}}]} as unknown as DocumentNode<UserFragment, unknown>;
 export const CreateTodoDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"CreateTodo"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"createTodoInput"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"CreateTodoInput"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"createTodo"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"createTodoInput"},"value":{"kind":"Variable","name":{"kind":"Name","value":"createTodoInput"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"TodoFragment"}}]}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"TodoFragment"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"Todo"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"title"}},{"kind":"Field","name":{"kind":"Name","value":"status"}},{"kind":"Field","name":{"kind":"Name","value":"description"}},{"kind":"Field","name":{"kind":"Name","value":"createdAt"}},{"kind":"Field","name":{"kind":"Name","value":"updatedAt"}}]}}]} as unknown as DocumentNode<CreateTodoMutation, CreateTodoMutationVariables>;
 export const UpdateTodoDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"UpdateTodo"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"updateTodoInput"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"UpdateTodoInput"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"updateTodo"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"updateTodoInput"},"value":{"kind":"Variable","name":{"kind":"Name","value":"updateTodoInput"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"TodoFragment"}}]}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"TodoFragment"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"Todo"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"title"}},{"kind":"Field","name":{"kind":"Name","value":"status"}},{"kind":"Field","name":{"kind":"Name","value":"description"}},{"kind":"Field","name":{"kind":"Name","value":"createdAt"}},{"kind":"Field","name":{"kind":"Name","value":"updatedAt"}}]}}]} as unknown as DocumentNode<UpdateTodoMutation, UpdateTodoMutationVariables>;
 export const RemoveTodoDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"RemoveTodo"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"id"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"removeTodo"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"id"},"value":{"kind":"Variable","name":{"kind":"Name","value":"id"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}}]}}]}}]} as unknown as DocumentNode<RemoveTodoMutation, RemoveTodoMutationVariables>;
 export const GetTodosDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetTodos"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"todos"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"TodoFragment"}}]}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"TodoFragment"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"Todo"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"title"}},{"kind":"Field","name":{"kind":"Name","value":"status"}},{"kind":"Field","name":{"kind":"Name","value":"description"}},{"kind":"Field","name":{"kind":"Name","value":"createdAt"}},{"kind":"Field","name":{"kind":"Name","value":"updatedAt"}}]}}]} as unknown as DocumentNode<GetTodosQuery, GetTodosQueryVariables>;
+export const GetUsersDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetUsers"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"users"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"User"}}]}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"User"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"User"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"email"}},{"kind":"Field","name":{"kind":"Name","value":"roleId"}},{"kind":"Field","name":{"kind":"Name","value":"createdAt"}},{"kind":"Field","name":{"kind":"Name","value":"updatedAt"}}]}}]} as unknown as DocumentNode<GetUsersQuery, GetUsersQueryVariables>;
+export const CreateUserDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"CreateUser"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"createUserInput"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"CreateUserInput"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"createUser"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"createUserInput"},"value":{"kind":"Variable","name":{"kind":"Name","value":"createUserInput"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"User"}}]}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"User"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"User"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"email"}},{"kind":"Field","name":{"kind":"Name","value":"roleId"}},{"kind":"Field","name":{"kind":"Name","value":"createdAt"}},{"kind":"Field","name":{"kind":"Name","value":"updatedAt"}}]}}]} as unknown as DocumentNode<CreateUserMutation, CreateUserMutationVariables>;
 /** All built-in and custom scalars, mapped to their actual values */
 export type Scalars = {
   ID: { input: string; output: string; }
@@ -195,8 +233,14 @@ export type CreateTodoInput = {
 };
 
 export type CreateUserInput = {
-  /** Example field (placeholder) */
-  exampleField: Scalars['Int']['input'];
+  /** メールアドレス */
+  email: Scalars['String']['input'];
+  /** 名前 */
+  name: Scalars['String']['input'];
+  /** パスワード */
+  password: Scalars['String']['input'];
+  /** ロールID */
+  roleId: Scalars['String']['input'];
 };
 
 export type Mutation = {
@@ -244,6 +288,7 @@ export type Query = {
   todo: Todo;
   todos: Array<Todo>;
   user: User;
+  users: Array<User>;
 };
 
 
@@ -283,9 +328,15 @@ export type UpdateTodoInput = {
 };
 
 export type UpdateUserInput = {
-  /** Example field (placeholder) */
-  exampleField?: InputMaybe<Scalars['Int']['input']>;
+  /** メールアドレス */
+  email: Scalars['String']['input'];
   id: Scalars['Int']['input'];
+  /** 名前 */
+  name: Scalars['String']['input'];
+  /** パスワード */
+  password?: InputMaybe<Scalars['String']['input']>;
+  /** ロールID */
+  roleId: Scalars['String']['input'];
 };
 
 export type User = {
@@ -298,6 +349,8 @@ export type User = {
   id: Scalars['Int']['output'];
   /** 名前 */
   name: Scalars['String']['output'];
+  /** ロールID */
+  roleId: Scalars['String']['output'];
   /** 更新日時 */
   updatedAt: Scalars['DateTime']['output'];
 };
@@ -308,6 +361,16 @@ export const TodoFragment = gql`
   title
   status
   description
+  createdAt
+  updatedAt
+}
+    `;
+export const User = gql`
+    fragment User on User {
+  id
+  name
+  email
+  roleId
   createdAt
   updatedAt
 }
@@ -340,3 +403,17 @@ export const GetTodos = gql`
   }
 }
     ${TodoFragment}`;
+export const GetUsers = gql`
+    query GetUsers {
+  users {
+    ...User
+  }
+}
+    ${User}`;
+export const CreateUser = gql`
+    mutation CreateUser($createUserInput: CreateUserInput!) {
+  createUser(createUserInput: $createUserInput) {
+    ...User
+  }
+}
+    ${User}`;

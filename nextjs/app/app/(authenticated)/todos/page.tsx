@@ -16,7 +16,6 @@ import CreateTodoModal from "./components/CreateTodoModal";
 import { useRouter } from "next/navigation";
 import { useFragment } from "@/graphql/@generated";
 import TodoCard from "./components/TodoCard";
-import Notification from "@/app/components/atoms/Notification";
 
 export default function Home() {
   // ルーター取得

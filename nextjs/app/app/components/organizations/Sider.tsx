@@ -3,14 +3,14 @@ import { MenuOutlined } from "@ant-design/icons";
 import { AntdIconProps } from "@ant-design/icons/lib/components/AntdIcon";
 import { Menu } from "antd";
 import Sider from "antd/es/layout/Sider";
-import { useState } from "react";
+import React, { useState } from "react";
 
 type SideMenu = {
   key: string;
   icon: React.FunctionComponentElement<
     Omit<AntdIconProps, "ref"> & React.RefAttributes<HTMLSpanElement>
   >;
-  label: string;
+  label: React.ReactNode;
 };
 interface Props {
   menus: SideMenu[];

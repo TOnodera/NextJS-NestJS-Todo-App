@@ -10,6 +10,7 @@ import Footer from "../components/organizations/Footer";
 import { getAccessToken } from "../utils";
 import { redirect } from "next/navigation";
 import UrqlProvider from "../components/organizations/UrqlProvider";
+import Link from "next/link";
 
 export const metadata: Metadata = {
   title: "Todoアプリケーション",
@@ -19,8 +20,8 @@ export const metadata: Metadata = {
 // サイドメニュー
 const menus = [
   {
-    key: "1",
-    label: "ユーザー管理",
+    key: "users",
+    label: <Link href="/users">ユーザー管理</Link>,
     icon: React.createElement(UserOutlined),
   },
 ];
@@ -50,6 +51,7 @@ export default async function RootLayout({
                   marginTop: "1rem",
                   height: "100%",
                   margin: "0 auto",
+                  overflowY: "auto",
                 }}
               >
                 {children}

@@ -20,5 +20,16 @@ export const STATUSES: { name: string; status: TODO_TASK_STATUS }[] = [
   },
 ] as const;
 
+export const Roles = [
+  {
+    type: "admin",
+    name: "管理者",
+  },
+  {
+    type: "user",
+    name: "ユーザー",
+  },
+] as const;
+
 // セッション用のクッキー有効期限(日数)
 export const COOKIE_TTL_DAY = 7;
