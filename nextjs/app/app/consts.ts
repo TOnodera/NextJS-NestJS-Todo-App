@@ -20,7 +20,9 @@ export const STATUSES: { name: string; status: TODO_TASK_STATUS }[] = [
   },
 ] as const;
 
-export const Roles = [
+export type RoleType = "admin" | "user";
+export type Role = { type: RoleType; name: string };
+export const Roles: Role[] = [
   {
     type: "admin",
     name: "管理者",

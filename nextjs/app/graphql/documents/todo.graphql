@@ -51,3 +51,15 @@ mutation CreateUser($createUserInput: CreateUserInput!) {
     ...User
   }
 }
+
+mutation UpdateUser($updateUserInput: UpdateUserInput!) {
+  updateUser(updateUserInput: $updateUserInput) {
+    ...User
+  }
+}
+
+mutation DeleteUser($id: Int!) {
+  deleteUser(id: $id) {
+    ...User
+  }
+}

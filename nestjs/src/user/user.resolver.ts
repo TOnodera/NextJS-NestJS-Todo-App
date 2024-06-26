@@ -16,7 +16,7 @@ export class UserResolver {
   constructor(private readonly userService: UserService) {}
 
   @Roles([Role.ADMIN])
-  @Mutation(() => User)
+  @Mutation(() => User, { name: 'createUser' })
   createUser(@Args('createUserInput') createUserInput: CreateUserInput) {
     return this.userService.create(createUserInput);
   }
@@ -31,12 +31,12 @@ export class UserResolver {
     return this.userService.findOne(id);
   }
 
-  @Mutation(() => User)
+  @Mutation(() => User, { name: 'updateUser' })
   updateUser(@Args('updateUserInput') updateUserInput: UpdateUserInput) {
     return this.userService.update(updateUserInput.id, updateUserInput);
   }
 
-  @Mutation(() => User)
+  @Mutation(() => User, { name: 'deleteUser' })
   removeUser(@Args('id', { type: () => Int }) id: number) {
     return this.userService.remove(id);
   }

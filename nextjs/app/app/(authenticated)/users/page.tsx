@@ -2,17 +2,22 @@
 import React, { useState } from "react";
 import { Button, Table } from "antd";
 import type { TableColumnsType } from "antd";
-import { PlusSquareOutlined } from "@ant-design/icons";
-import CreateUserModal from "./components/CreateUserModal";
+import { ConsoleSqlOutlined, PlusSquareOutlined } from "@ant-design/icons";
+import CreateUserModal from "../../components/molecules/CreateUserModal";
 import { useMutation, useQuery } from "urql";
 import {
   CreateUserDocument,
   CreateUserInput,
+  DeleteUserDocument,
   GetUsersDocument,
+  UpdateUserDocument,
+  UpdateUserInput,
   UserFragmentDoc,
 } from "@/graphql/@generated/graphql";
 import { useFragment } from "@/graphql/@generated";
 import { Roles } from "@/app/consts";
+import UpdateUser from "@/app/components/organizations/users/UpdateUser";
+import DeleteUser from "@/app/components/organizations/users/DeleteUser";
 
 interface DataType {
   key: React.Key;
@@ -41,7 +46,8 @@ const columns: TableColumnsType<DataType> = [
 ];
 
 export default function Page() {
-  const [isOpen, setIsOpen] = useState(false);
+  // 登録モーダルの開閉状態管理
+  const [isOpenCreateModal, setIsOpenCreateModal] = useState(false);
 
   /**
    * ユーザー取得
@@ -49,19 +55,6 @@ export default function Page() {
   const [result, reExecuteQuery] = useQuery({ query: GetUsersDocument });
   const { data, fetching, error } = result;
   const usersFragment = useFragment(UserFragmentDoc, data?.users);
-  const dataSource: DataType[] | undefined = usersFragment?.map<DataType>((user, idx) => {
-    return {
-      key: idx,
-      name: user.name,
-      role: Roles.find((role) => role.type === user.roleId)!.name,
-      updateButton: <Button type="primary">編集</Button>,
-      deleteButton: (
-        <Button type="primary" danger>
-          削除
-        </Button>
-      ),
-    };
-  });
 
   /**
    * データ再取得関数
@@ -77,20 +70,52 @@ export default function Page() {
   const handleCreateUser = (createUserInput: CreateUserInput) => {
     createUser({ createUserInput })
       .then(() => reFetch())
-      .finally(() => setIsOpen(false));
+      .finally(() => setIsOpenCreateModal(false));
   };
+
+  /**
+   * ユーザー更新
+   */
+  const [updateUserResult, updateUser] = useMutation(UpdateUserDocument);
+  const handleUpdateUser = (updateUserInput: UpdateUserInput) => {
+    updateUser({ updateUserInput })
+      .then(() => reFetch())
+      .finally(() => console.log(updateUserResult));
+  };
+
+  /**
+   * ユーザー削除
+   */
+  const [deleteUserResult, deleteUser] = useMutation(DeleteUserDocument);
+  const handleDeleteUser = (id: number) => {
+    deleteUser({ id }).then(() => reFetch());
+  };
+
+  /**
+   * 表示データ
+   */
+  const dataSource: DataType[] | undefined = usersFragment?.map<DataType>((user, idx) => {
+    return {
+      key: idx,
+      name: user.name,
+      role: Roles.find((role) => role.type === user.roleId)!.name,
+      updateButton: <UpdateUser user={user} onUpdateUserHandler={handleUpdateUser} />,
+      deleteButton: <DeleteUser user={user} onDeleteUserHandler={handleDeleteUser} />,
+    };
+  });
+
   return (
     <div>
       <div style={{ marginBottom: 16 }}>
-        <Button type="primary" onClick={() => setIsOpen(true)}>
+        <Button type="primary" onClick={() => setIsOpenCreateModal(true)}>
           <PlusSquareOutlined />
           登録
         </Button>
       </div>
       <Table columns={columns} dataSource={dataSource} />
       <CreateUserModal
-        isOpen={isOpen}
-        onCancel={() => setIsOpen(false)}
+        isOpen={isOpenCreateModal}
+        onCancel={() => setIsOpenCreateModal(false)}
         onCreateUserHandler={handleCreateUser}
       />
     </div>

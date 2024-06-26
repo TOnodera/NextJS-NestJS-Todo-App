@@ -60,7 +60,7 @@ type Mutation {
   removeTodo(id: Int!): Todo!
   createUser(createUserInput: CreateUserInput!): User!
   updateUser(updateUserInput: UpdateUserInput!): User!
-  removeUser(id: Int!): User!
+  deleteUser(id: Int!): User!
 }
 
 input CreateTodoInput {
