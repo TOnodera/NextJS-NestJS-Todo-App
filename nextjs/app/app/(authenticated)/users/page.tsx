@@ -2,7 +2,7 @@
 import React, { useState } from "react";
 import { Button, Table } from "antd";
 import type { TableColumnsType } from "antd";
-import { ConsoleSqlOutlined, PlusSquareOutlined } from "@ant-design/icons";
+import { PlusSquareOutlined } from "@ant-design/icons";
 import CreateUserModal from "../../components/molecules/CreateUserModal";
 import { useMutation, useQuery } from "urql";
 import {

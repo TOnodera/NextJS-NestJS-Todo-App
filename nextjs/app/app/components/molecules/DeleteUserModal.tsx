@@ -1,6 +1,5 @@
-import { Roles } from "@/app/consts";
-import { UpdateUserInput, User } from "@/graphql/@generated/graphql";
-import { Button, Form, Input, Modal, Radio, Typography } from "antd";
+import { User } from "@/graphql/@generated/graphql";
+import { Button, Form, Modal, Typography } from "antd";
 
 const { Title } = Typography;
 

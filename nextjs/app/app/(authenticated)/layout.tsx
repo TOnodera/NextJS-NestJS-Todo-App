@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { Card, Layout } from "antd";
 import { Content } from "antd/es/layout/layout";
 import "antd/dist/reset.css";
-import { UserOutlined } from "@ant-design/icons";
+import { CheckSquareOutlined, UserOutlined } from "@ant-design/icons";
 import React from "react";
 import SideMenu from "../components/organizations/Sider";
 import Header from "../components/organizations/Header";
@@ -22,7 +22,12 @@ const menus = [
   {
     key: "users",
     label: <Link href="/users">ユーザー管理</Link>,
-    icon: React.createElement(UserOutlined),
+    icon: <UserOutlined />,
+  },
+  {
+    key: "todos",
+    label: <Link href="/todos">TODO管理</Link>,
+    icon: <CheckSquareOutlined />,
   },
 ];
 

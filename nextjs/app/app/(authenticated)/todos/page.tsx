@@ -86,7 +86,6 @@ export default function Home() {
     removeTodo({ id }).then((res) => {
       if (res.error) {
         setErrorText("削除に失敗しました");
-        console.log(res.error);
         return;
       }
       reFetch();
