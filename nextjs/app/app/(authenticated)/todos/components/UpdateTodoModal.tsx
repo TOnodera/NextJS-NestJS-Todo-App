@@ -5,26 +5,19 @@ import { Button, Form, Input, Modal, Radio, Typography } from "antd";
 const { Title } = Typography;
 
 interface Props {
-  onUpdateHandler: (updateTodoInput: UpdateTodoInput) => void;
-  onDeleteHandler: (id: number) => void;
+  onUpdateTodoHandler: (updateTodoInput: UpdateTodoInput) => void;
   onCancel: () => void;
   todo: TodoFragmentFragment;
   isOpen: boolean;
 }
-export default function UpdateTodoModal({
-  onUpdateHandler,
-  onDeleteHandler,
-  onCancel,
-  todo,
-  isOpen,
-}: Props) {
+export default function UpdateTodoModal({ onUpdateTodoHandler, onCancel, todo, isOpen }: Props) {
   return (
     <Modal footer={null} open={isOpen} onCancel={onCancel}>
       <Title level={4}>タスク更新</Title>
       <Form
         style={{ marginTop: "2rem" }}
         onFinish={(value) => {
-          onUpdateHandler(value);
+          onUpdateTodoHandler(value);
           onCancel();
         }}
         initialValues={{
@@ -59,16 +52,6 @@ export default function UpdateTodoModal({
         <Form.Item style={{ textAlign: "right" }}>
           <Button type="primary" htmlType="submit" ghost style={{ marginRight: "1rem" }}>
             更新
-          </Button>
-          <Button
-            type="primary"
-            danger
-            onClick={() => {
-              onDeleteHandler(todo.id);
-              onCancel();
-            }}
-          >
-            削除
           </Button>
         </Form.Item>
       </Form>

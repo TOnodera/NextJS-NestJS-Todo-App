@@ -23,6 +23,7 @@ interface DataType {
   key: React.Key;
   name: string;
   role: string;
+  updateButton: React.ReactNode;
   deleteButton: React.ReactNode;
 }
 
