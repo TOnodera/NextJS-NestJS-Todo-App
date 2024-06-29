@@ -1,7 +1,7 @@
 import { Todo } from "@/graphql/@generated/graphql";
 import { Button } from "antd";
 import { useState } from "react";
-import DeleteTodoModal from "./DeleteTodoModal";
+import DeleteTodoModal from "../../molecules/todos/DeleteTodoModal";
 
 interface Props {
   todo: Todo;

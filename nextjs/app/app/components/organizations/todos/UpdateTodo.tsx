@@ -1,7 +1,7 @@
 import { Todo, UpdateTodoInput } from "@/graphql/@generated/graphql";
 import { Button } from "antd";
 import { useState } from "react";
-import UpdateTodoModal from "./UpdateTodoModal";
+import UpdateTodoModal from "../../molecules/todos/UpdateTodoModal";
 
 interface Props {
   todo: Todo;

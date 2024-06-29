@@ -6,14 +6,15 @@ const { Title } = Typography;
 interface Props {
   isOpen: boolean;
   onCreateTodoHandler: (createTodoInput: CreateTodoInput) => void;
-  onCancel: ()=>void;
+  onCancel: () => void;
 }
 export default function CreateTodoModal({ isOpen, onCreateTodoHandler, onCancel }: Props) {
+  const initialValue = { title: "", description: "" };
   return (
     <Modal open={isOpen} footer={null} onCancel={onCancel}>
       <Title level={4}>新規タスク登録</Title>
       <Form
-        initialValues={{ title: "", description: "" }}
+        initialValues={initialValue}
         style={{ marginTop: "2rem" }}
         onFinish={onCreateTodoHandler}
       >

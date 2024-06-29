@@ -1,7 +1,7 @@
 import { UpdateUserInput, User } from "@/graphql/@generated/graphql";
 import { Button } from "antd";
 import { useState } from "react";
-import UpdateUserModal from "../../molecules/UpdateUserModal";
+import UpdateUserModal from "../../molecules/users/UpdateUserModal";
 
 interface Props {
   user: User;

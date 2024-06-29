@@ -1,9 +1,8 @@
 "use client";
 import React, { useState } from "react";
-import { Button, Table } from "antd";
-import type { TableColumnsType } from "antd";
+import { Button } from "antd";
 import { PlusSquareOutlined } from "@ant-design/icons";
-import CreateUserModal from "../../components/molecules/CreateUserModal";
+import CreateUserModal from "../../components/molecules/users/CreateUserModal";
 import { useMutation, useQuery } from "urql";
 import {
   CreateUserDocument,
@@ -18,33 +17,7 @@ import { useFragment } from "@/graphql/@generated";
 import { Roles } from "@/app/consts";
 import UpdateUser from "@/app/components/organizations/users/UpdateUser";
 import DeleteUser from "@/app/components/organizations/users/DeleteUser";
-
-interface DataType {
-  key: React.Key;
-  name: string;
-  role: string;
-  updateButton: React.ReactNode;
-  deleteButton: React.ReactNode;
-}
-
-const columns: TableColumnsType<DataType> = [
-  {
-    title: "ユーザー名",
-    dataIndex: "name",
-  },
-  {
-    title: "ロール",
-    dataIndex: "role",
-  },
-  {
-    title: "編集",
-    dataIndex: "updateButton",
-  },
-  {
-    title: "削除",
-    dataIndex: "deleteButton",
-  },
-];
+import UserTable, { UserTableDataType } from "@/app/components/organizations/users/UserTable";
 
 export default function Page() {
   // 登録モーダルの開閉状態管理
@@ -54,7 +27,7 @@ export default function Page() {
    * ユーザー取得
    */
   const [result, reExecuteQuery] = useQuery({ query: GetUsersDocument });
-  const { data, fetching, error } = result;
+  const { data } = result;
   const usersFragment = useFragment(UserFragmentDoc, data?.users);
 
   /**
@@ -67,7 +40,7 @@ export default function Page() {
   /**
    * ユーザー登録
    */
-  const [createUserResult, createUser] = useMutation(CreateUserDocument);
+  const [, createUser] = useMutation(CreateUserDocument);
   const handleCreateUser = (createUserInput: CreateUserInput) => {
     createUser({ createUserInput })
       .then(() => reFetch())
@@ -77,17 +50,15 @@ export default function Page() {
   /**
    * ユーザー更新
    */
-  const [updateUserResult, updateUser] = useMutation(UpdateUserDocument);
+  const [, updateUser] = useMutation(UpdateUserDocument);
   const handleUpdateUser = (updateUserInput: UpdateUserInput) => {
-    updateUser({ updateUserInput })
-      .then(() => reFetch())
-      .finally(() => console.log(updateUserResult));
+    updateUser({ updateUserInput }).then(() => reFetch());
   };
 
   /**
    * ユーザー削除
    */
-  const [deleteUserResult, deleteUser] = useMutation(DeleteUserDocument);
+  const [, deleteUser] = useMutation(DeleteUserDocument);
   const handleDeleteUser = (id: number) => {
     deleteUser({ id }).then(() => reFetch());
   };
@@ -95,15 +66,17 @@ export default function Page() {
   /**
    * 表示データ
    */
-  const dataSource: DataType[] | undefined = usersFragment?.map<DataType>((user, idx) => {
-    return {
-      key: idx,
-      name: user.name,
-      role: Roles.find((role) => role.type === user.roleId)!.name,
-      updateButton: <UpdateUser user={user} onUpdateUserHandler={handleUpdateUser} />,
-      deleteButton: <DeleteUser user={user} onDeleteUserHandler={handleDeleteUser} />,
-    };
-  });
+  const dataSource: UserTableDataType[] | undefined = usersFragment?.map<UserTableDataType>(
+    (user) => {
+      return {
+        key: user.id,
+        name: user.name,
+        role: Roles.find((role) => role.type === user.roleId)!.name,
+        updateButton: <UpdateUser user={user} onUpdateUserHandler={handleUpdateUser} />,
+        deleteButton: <DeleteUser user={user} onDeleteUserHandler={handleDeleteUser} />,
+      };
+    },
+  );
 
   return (
     <div>
@@ -113,7 +86,7 @@ export default function Page() {
           登録
         </Button>
       </div>
-      <Table columns={columns} dataSource={dataSource} />
+      <UserTable dataSource={dataSource} />
       <CreateUserModal
         isOpen={isOpenCreateModal}
         onCancel={() => setIsOpenCreateModal(false)}
