@@ -1,30 +1,11 @@
+import "server-only";
 import { cookies } from "next/headers";
-import { ApiResponse, SessionDataType } from "./type";
+import { SessionDataType } from "../type";
 import { v4 as uuid } from "uuid";
 import dayjs from "dayjs";
-import { COOKIE_TTL_DAY } from "./consts";
+import { COOKIE_TTL_DAY } from "../consts";
 import { createClient } from "redis";
-
-/**
- * fetchのラッパー(post用)
- * @param {string} path
- * @param {T} data
- * @returns {Promise<ApiResponse<R>>}
- */
-export async function post<T, R>(path: string, data: T): Promise<ApiResponse<R>> {
-  const trimedPath = path.startsWith("/") ? path.slice(1) : path;
-  const url = `${process.env.API_URL}/${trimedPath}`;
-  const result = await fetch(url, {
-    headers: {
-      "Content-Type": "application/json",
-    },
-    method: "POST",
-    body: JSON.stringify(data),
-  }).then(async (r) => {
-    return { data: (await r.json()) as R, status: r.status };
-  });
-  return { status: result.status, data: result.data };
-}
+import pino from "pino";
 
 /**
  * 新規セッション作成
@@ -80,3 +61,8 @@ export const getAccessToken = async (): Promise<string | undefined> => {
 
   return sessionData.accessToken;
 };
+
+/**
+ * ロガー
+ */
+export const logger = pino({ level: process.env.NODE_ENV === "production" ? "info" : "debug" });

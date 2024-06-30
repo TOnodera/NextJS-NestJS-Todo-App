@@ -1,5 +1,5 @@
 import { STATUSES } from "@/app/consts";
-import { TodoFragmentFragment, UpdateTodoInput } from "@/graphql/@generated/graphql";
+import { TodoFragment, UpdateTodoInput } from "@/graphql/@generated/graphql";
 import { Button, Form, Input, Modal, Radio, Typography } from "antd";
 
 const { Title } = Typography;
@@ -7,7 +7,7 @@ const { Title } = Typography;
 interface Props {
   onUpdateTodoHandler: (updateTodoInput: UpdateTodoInput) => void;
   onCancel: () => void;
-  todo: TodoFragmentFragment;
+  todo: TodoFragment;
   isOpen: boolean;
 }
 export default function UpdateTodoModal({ onUpdateTodoHandler, onCancel, todo, isOpen }: Props) {

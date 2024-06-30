@@ -4,6 +4,8 @@ import { ThemeConfig } from "antd";
 import React from "react";
 import "./globals.scss";
 import { AppProvider } from "./components/organizations/AppProvider";
+import ErrorHandler from "./components/organizations/PromiseErrorHandler";
+import PromiseErrorHandler from "./components/organizations/PromiseErrorHandler";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -36,7 +38,11 @@ export default function RootLayout({
         <meta name="viewport" content="width=device-width" />
       </head>
       <body className={inter.className}>
-        <AppProvider theme={themeConfig}>{children}</AppProvider>
+        <ErrorHandler>
+          <PromiseErrorHandler>
+            <AppProvider theme={themeConfig}>{children}</AppProvider>
+          </PromiseErrorHandler>
+        </ErrorHandler>
       </body>
     </html>
   );

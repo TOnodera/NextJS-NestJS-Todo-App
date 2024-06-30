@@ -1,13 +1,40 @@
 "use client";
-import { Button, Card, Col, Form, Input, Row } from "antd";
-import Title from "antd/es/typography/Title";
+import { Button, Card, Col, Row } from "antd";
 import Loading from "./components/organizations/Loading";
 import { useState } from "react";
-import { useForm } from "antd/es/form/Form";
+import { z } from "zod";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useMutation } from "urql";
+import { LoginDocument } from "@/graphql/@generated/graphql";
+import { post } from "./utills/forClientCompentnts";
+import { useRouter } from "next/navigation";
+
+const schema = z.object({
+  email: z.string().email({ message: "メールアドレスを入力してください。" }),
+  password: z.string().min(1, { message: "パスワードを入力してください。" }),
+});
+type Schema = z.infer<typeof schema>;
 
 export default function Page() {
-  const [isPending, setIsPendind] = useState(false);
-  const { register, handleSubmit } = useForm();
+  const [isPending, setIsPending] = useState(false);
+  const router = useRouter();
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<Schema>({
+    resolver: zodResolver(schema),
+  });
+
+  const [, login] = useMutation(LoginDocument);
+  const onSubmitHandler = async (loginInput: Schema) => {
+    setIsPending(true);
+    const { data } = await login({ loginInput });
+    await post("/token", { accessToken: data?.login.accessToken });
+    setIsPending(false);
+    router.push("/todos");
+  };
 
   return (
     <>
@@ -15,47 +42,19 @@ export default function Page() {
       <Row justify="center" align="middle" style={{ height: "100vh" }}>
         <Col>
           <Card>
-            {formState?.message && (
-              <Title level={4} type="danger" style={{ textAlign: "center", marginBottom: "1rem" }}>
-                {formState.message}
-              </Title>
-            )}
-            <Form
-              name="basic"
-              labelCol={{ span: 8 }}
-              wrapperCol={{ span: 16 }}
-              style={{ maxWidth: 600 }}
-              initialValues={{ remember: false }}
-              autoComplete="off"
-              onFinish={(value) => {
-                dispatch(value);
-                setIsPendind(true);
-              }}
-            >
-              <Form.Item
-                label="メールアドレス"
-                name="email"
-                validateStatus={formState?.errors?.email ? "error" : undefined}
-                help={formState?.errors?.email}
-              >
-                <Input name="email" style={{ marginLeft: "1rem" }} />
-              </Form.Item>
-
-              <Form.Item
-                label="パスワード"
-                name="password"
-                validateStatus={formState?.errors?.password ? "error" : undefined}
-                help={formState?.errors?.password}
-              >
-                <Input.Password name="password" style={{ marginLeft: "1rem" }} />
-              </Form.Item>
-
-              <Form.Item wrapperCol={{ offset: 8, span: 16 }} style={{ textAlign: "right" }}>
-                <Button type="primary" htmlType="submit">
-                  ログイン
-                </Button>
-              </Form.Item>
-            </Form>
+            <form action="">
+              <div>
+                <input type="text" {...register("email")} />
+                {errors.email?.message && <p>{errors.email.message}</p>}
+              </div>
+              <div>
+                <input type="text" {...register("password")} />
+                {errors.password?.message && <p>{errors.password.message}</p>}
+              </div>
+              <Button type="primary" onClick={handleSubmit(onSubmitHandler)}>
+                ログイン
+              </Button>
+            </form>
           </Card>
         </Col>
       </Row>

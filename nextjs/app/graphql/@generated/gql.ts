@@ -13,6 +13,7 @@ import { TypedDocumentNode as DocumentNode } from '@graphql-typed-document-node/
  * Therefore it is highly recommended to use the babel or swc plugin for production.
  */
 const documents = {
+    "mutation Login($loginInput: LoginInput!) {\n  login(login: $loginInput) {\n    accessToken\n  }\n}": types.LoginDocument,
     "fragment Todo on Todo {\n  id\n  title\n  status\n  description\n  createdAt\n  updatedAt\n}\n\nmutation CreateTodo($createTodoInput: CreateTodoInput!) {\n  createTodo(createTodoInput: $createTodoInput) {\n    ...Todo\n  }\n}\n\nmutation UpdateTodo($updateTodoInput: UpdateTodoInput!) {\n  updateTodo(updateTodoInput: $updateTodoInput) {\n    ...Todo\n  }\n}\n\nmutation RemoveTodo($id: Int!) {\n  removeTodo(id: $id) {\n    id\n  }\n}\n\nquery GetTodos {\n  todos {\n    ...Todo\n  }\n}": types.TodoFragmentDoc,
     "fragment User on User {\n  id\n  name\n  email\n  roleId\n  createdAt\n  updatedAt\n}\n\nquery GetUsers {\n  users {\n    ...User\n  }\n}\n\nmutation CreateUser($createUserInput: CreateUserInput!) {\n  createUser(createUserInput: $createUserInput) {\n    ...User\n  }\n}\n\nmutation UpdateUser($updateUserInput: UpdateUserInput!) {\n  updateUser(updateUserInput: $updateUserInput) {\n    ...User\n  }\n}\n\nmutation DeleteUser($id: Int!) {\n  deleteUser(id: $id) {\n    ...User\n  }\n}": types.UserFragmentDoc,
 };
@@ -31,6 +32,10 @@ const documents = {
  */
 export function graphql(source: string): unknown;
 
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "mutation Login($loginInput: LoginInput!) {\n  login(login: $loginInput) {\n    accessToken\n  }\n}"): (typeof documents)["mutation Login($loginInput: LoginInput!) {\n  login(login: $loginInput) {\n    accessToken\n  }\n}"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
