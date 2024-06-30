@@ -15,7 +15,7 @@ import { Role } from 'src/type';
 export class TodoResolver {
   constructor(private readonly todoService: TodoService) {}
 
-  @Mutation(() => Todo)
+  @Mutation(() => Todo, { name: 'createTodo' })
   async createTodo(@Args('createTodoInput') createTodoInput: CreateTodoInput) {
     return await this.todoService.create(createTodoInput);
   }
@@ -36,7 +36,7 @@ export class TodoResolver {
     return await this.todoService.update(updateTodoInput.id, updateTodoInput);
   }
 
-  @Mutation(() => Todo)
+  @Mutation(() => Todo, { name: 'removeTodo' })
   async removeTodo(@Args('id', { type: () => Int }) id: number) {
     return await this.todoService.remove(id);
   }

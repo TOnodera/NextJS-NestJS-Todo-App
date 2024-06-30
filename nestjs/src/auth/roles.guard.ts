@@ -17,7 +17,6 @@ export class RolesGuard implements CanActivate {
     }
     // contextからGraphQLのctxを取得する
     const ctx = GqlExecutionContext.create(context);
-    // return ctx.getContext().req;
     const user: (users & { role: roles }) | undefined =
       ctx.getContext().req.user;
     return roles.includes(user?.role.id);

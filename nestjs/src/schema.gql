@@ -47,6 +47,11 @@ type User {
   updatedAt: DateTime!
 }
 
+type Token {
+  """トークン"""
+  accessToken: String!
+}
+
 type Query {
   todos: [Todo!]!
   todo(id: Int!): Todo!
@@ -58,6 +63,7 @@ type Mutation {
   createTodo(createTodoInput: CreateTodoInput!): Todo!
   updateTodo(updateTodoInput: UpdateTodoInput!): Todo!
   removeTodo(id: Int!): Todo!
+  login(login: LoginInput!): Token!
   createUser(createUserInput: CreateUserInput!): User!
   updateUser(updateUserInput: UpdateUserInput!): User!
   deleteUser(id: Int!): User!
@@ -82,6 +88,14 @@ input UpdateTodoInput {
 
   """詳細"""
   description: String
+}
+
+input LoginInput {
+  """メールアドレス"""
+  email: String!
+
+  """パスワード"""
+  password: String!
 }
 
 input CreateUserInput {
