@@ -1,22 +1,14 @@
 "use client";
 import { Button, Card, Col, Form, Input, Row } from "antd";
-import { onLoginSubmit } from "./actions/top/login";
-import { useFormState } from "react-dom";
-import { Credentials, LoginFormStateType } from "./type";
 import Title from "antd/es/typography/Title";
 import Loading from "./components/organizations/Loading";
-import { useEffect, useState } from "react";
+import { useState } from "react";
+import { useForm } from "antd/es/form/Form";
 
 export default function Page() {
-  // const [formState, dispatch, isPending] = useFormState<LoginFormStateType, Credentials>(onLoginSubmit, {});
-  // TODO ↑これでisPending使いたいがなぜかうまくいかない
-  const [formState, dispatch] = useFormState<LoginFormStateType, Credentials>(onLoginSubmit, {});
   const [isPending, setIsPendind] = useState(false);
+  const { register, handleSubmit } = useForm();
 
-  // TODO useFormStateのpending使いたい
-  useEffect(() => {
-    setIsPendind(false);
-  }, [formState]);
   return (
     <>
       <Loading isOpen={isPending} />

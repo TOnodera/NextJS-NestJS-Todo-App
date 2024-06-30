@@ -30,3 +30,6 @@ export type SessionDataType = {
   sessionId: string;
   accessToken: string | undefined;
 };
+
+// 認証エラー型
+export class AuthenticationError extends Error {}

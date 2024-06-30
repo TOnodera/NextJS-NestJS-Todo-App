@@ -1,4 +1,4 @@
-fragment TodoFragment on Todo {
+fragment Todo on Todo {
   id
   title
   status
@@ -9,13 +9,13 @@ fragment TodoFragment on Todo {
 
 mutation CreateTodo($createTodoInput: CreateTodoInput!) {
   createTodo(createTodoInput: $createTodoInput) {
-    ...TodoFragment
+    ...Todo
   }
 }
 
 mutation UpdateTodo($updateTodoInput: UpdateTodoInput!) {
   updateTodo(updateTodoInput: $updateTodoInput) {
-    ...TodoFragment
+    ...Todo
   }
 }
 
@@ -27,39 +27,6 @@ mutation RemoveTodo($id: Int!) {
 
 query GetTodos {
   todos {
-    ...TodoFragment
-  }
-}
-
-fragment User on User {
-  id
-  name
-  email
-  roleId
-  createdAt
-  updatedAt
-}
-
-query GetUsers {
-  users {
-    ...User
-  }
-}
-
-mutation CreateUser($createUserInput: CreateUserInput!) {
-  createUser(createUserInput: $createUserInput) {
-    ...User
-  }
-}
-
-mutation UpdateUser($updateUserInput: UpdateUserInput!) {
-  updateUser(updateUserInput: $updateUserInput) {
-    ...User
-  }
-}
-
-mutation DeleteUser($id: Int!) {
-  deleteUser(id: $id) {
-    ...User
+    ...Todo
   }
 }

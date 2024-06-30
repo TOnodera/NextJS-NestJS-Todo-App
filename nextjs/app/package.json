@@ -15,6 +15,7 @@
     "@ant-design/cssinjs": "^1.20.0",
     "@ant-design/icons": "^5.3.7",
     "@ant-design/nextjs-registry": "^1.0.0",
+    "@urql/exchange-auth": "^2.2.0",
     "antd": "^5.17.3",
     "dayjs": "^1.11.11",
     "http-status-codes": "^2.3.0",

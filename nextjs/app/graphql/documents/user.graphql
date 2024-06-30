@@ -1,0 +1,32 @@
+fragment User on User {
+  id
+  name
+  email
+  roleId
+  createdAt
+  updatedAt
+}
+
+query GetUsers {
+  users {
+    ...User
+  }
+}
+
+mutation CreateUser($createUserInput: CreateUserInput!) {
+  createUser(createUserInput: $createUserInput) {
+    ...User
+  }
+}
+
+mutation UpdateUser($updateUserInput: UpdateUserInput!) {
+  updateUser(updateUserInput: $updateUserInput) {
+    ...User
+  }
+}
+
+mutation DeleteUser($id: Int!) {
+  deleteUser(id: $id) {
+    ...User
+  }
+}

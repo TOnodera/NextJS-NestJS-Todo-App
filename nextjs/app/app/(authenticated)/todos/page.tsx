@@ -4,7 +4,7 @@ import {
   CreateTodoInput,
   GetTodosDocument,
   RemoveTodoDocument,
-  TodoFragmentFragmentDoc,
+  TodoFragmentDoc,
   UpdateTodoDocument,
   UpdateTodoInput,
 } from "@/graphql/@generated/graphql";
@@ -35,7 +35,7 @@ export default function Page() {
     reExecuteQuery({ requestPolicy: "network-only" });
   };
   // 型をつける
-  const todoFragments = useFragment(TodoFragmentFragmentDoc, data?.todos);
+  const todoFragments = useFragment(TodoFragmentDoc, data?.todos);
 
   /**
    * 登録処理
