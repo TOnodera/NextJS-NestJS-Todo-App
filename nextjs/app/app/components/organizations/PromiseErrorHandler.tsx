@@ -7,9 +7,15 @@ import React, { useEffect } from "react";
 export default function PromiseErrorHandler({ children }: { children: React.ReactNode }) {
   const router = useRouter();
   useEffect(() => {
+    /**
+     * 捕捉されなかった非同期エラーを処理する
+     * @param {PromiseRejectionEvent} event
+     */
     const handler = (event: PromiseRejectionEvent) => {
       event.promise.catch((error) => {
         if (error instanceof AuthenticationError) {
+          // これ以上バブリングするとコンソールエラーとなる
+          event.preventDefault();
           router.push("/");
           return;
         }
