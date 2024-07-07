@@ -18,6 +18,7 @@ import { Roles } from "@/app/consts";
 import UpdateUser from "@/app/components/organizations/users/UpdateUser";
 import DeleteUser from "@/app/components/organizations/users/DeleteUser";
 import UserTable, { UserTableDataType } from "@/app/components/organizations/users/UserTable";
+import Loading from "@/app/components/organizations/Loading";
 
 export default function Page() {
   // 登録モーダルの開閉状態管理
@@ -27,7 +28,7 @@ export default function Page() {
    * ユーザー取得
    */
   const [result, reExecuteQuery] = useQuery({ query: GetUsersDocument });
-  const { data } = result;
+  const { data, fetching } = result;
   const usersFragment = useFragment(UserFragmentDoc, data?.users);
 
   /**
@@ -79,19 +80,25 @@ export default function Page() {
   );
 
   return (
-    <div>
-      <div style={{ marginBottom: 16 }}>
-        <Button type="primary" onClick={() => setIsOpenCreateModal(true)}>
-          <PlusSquareOutlined />
-          登録
-        </Button>
-      </div>
-      <UserTable dataSource={dataSource} />
-      <CreateUserModal
-        isOpen={isOpenCreateModal}
-        onCancel={() => setIsOpenCreateModal(false)}
-        onCreateUserHandler={handleCreateUser}
-      />
-    </div>
+    <>
+      {fetching ? (
+        <Loading isOpen />
+      ) : (
+        <>
+          <div style={{ marginBottom: 16 }}>
+            <Button type="primary" onClick={() => setIsOpenCreateModal(true)}>
+              <PlusSquareOutlined />
+              登録
+            </Button>
+          </div>
+          <UserTable dataSource={dataSource} />
+          <CreateUserModal
+            isOpen={isOpenCreateModal}
+            onCancel={() => setIsOpenCreateModal(false)}
+            onCreateUserHandler={handleCreateUser}
+          />
+        </>
+      )}
+    </>
   );
 }

@@ -11,6 +11,7 @@ import { Post } from "./utills/forClientCompentnts";
 import { useRouter } from "next/navigation";
 import { useRecreateUrqlClient } from "./store/urqlStore";
 import style from "./page.module.scss";
+import { AuthenticationError } from "./type";
 
 const schema = z.object({
   email: z.string().email({ message: "メールアドレスを入力してください。" }),
@@ -20,6 +21,7 @@ type Schema = z.infer<typeof schema>;
 
 export default function Page() {
   const [isPending, setIsPending] = useState(false);
+  const [isAuthError, setIsAuthError] = useState(false);
   const router = useRouter();
   const {
     register,
@@ -32,16 +34,25 @@ export default function Page() {
   const recreateUrqlClient = useRecreateUrqlClient();
   const [, login] = useMutation(LoginDocument);
   const onSubmitHandler = async (loginInput: Schema) => {
-    setIsPending(true);
-    const { data } = await login({ loginInput });
-    if (data) {
-      await Post<{ accessToken: string }, void>("/token", { accessToken: data.login.accessToken });
+    try {
+      setIsPending(true);
+      const { data } = await login({ loginInput });
+      if (!data?.login.accessToken) {
+        throw new AuthenticationError();
+      }
+      await Post<{ accessToken: string }, void>("/token", {
+        accessToken: data.login.accessToken,
+      });
       // urqlクライアント再生成
       recreateUrqlClient();
       // todoページに繊維
       router.push("/todos");
+      setIsAuthError(false);
+    } catch (e) {
+      setIsAuthError(true);
+    } finally {
+      setIsPending(false);
     }
-    setIsPending(false);
   };
 
   return (
@@ -50,6 +61,7 @@ export default function Page() {
       <Row justify="center" align="middle" style={{ height: "100vh" }}>
         <Col>
           <Card>
+            {isAuthError && <p className={style["login-error-message"]}>認証に失敗しました。</p>}
             <h2>ログイン</h2>
             <form className={style["login-form"]}>
               <div className={style["login-form__row"]}>

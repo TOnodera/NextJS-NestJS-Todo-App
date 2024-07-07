@@ -8,13 +8,13 @@ export default function Loading({ isOpen }: Props) {
     <div style={{ position: "relative" }}>
       <div
         style={{
-          position: "absolute",
+          position: "fixed",
           top: 0,
           right: 0,
           width: "100%",
           height: "100vh",
           display: `${isOpen ? "block" : "none"}`,
-          backgroundColor: "rgba(0, 0, 0, 0.5)",
+          backgroundColor: "rgba(255, 255, 255, 1)",
           zIndex: 9999,
         }}
       >

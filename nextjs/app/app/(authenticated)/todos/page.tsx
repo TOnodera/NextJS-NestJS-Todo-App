@@ -10,13 +10,14 @@ import {
 } from "@/graphql/@generated/graphql";
 import { PlusSquareOutlined } from "@ant-design/icons";
 import { Button } from "antd";
-import { useState } from "react";
+import { Suspense, useState } from "react";
 import { useMutation, useQuery } from "urql";
 import CreateTodoModal from "../../components/molecules/todos/CreateTodoModal";
 import { useFragment } from "@/graphql/@generated";
 import UpdateTodo from "../../components/organizations/todos/UpdateTodo";
 import DeleteTodo from "../../components/organizations/todos/DeleteTodo";
 import TodoTable, { TodoTableDataType } from "@/app/components/organizations/todos/TodoTable";
+import Loading from "@/app/components/organizations/Loading";
 
 export default function Page() {
   //　登録モーダルオープン
@@ -26,7 +27,7 @@ export default function Page() {
    * データ取得処理実行
    */
   const [result, reExecuteQuery] = useQuery({ query: GetTodosDocument });
-  const { data } = result;
+  const { data, fetching } = result;
 
   /**
    * データ再取得関数定義（キャッシュからではなくネットワークから取得）
@@ -86,19 +87,25 @@ export default function Page() {
   );
 
   return (
-    <div>
-      <div style={{ marginBottom: 16 }}>
-        <Button type="primary" onClick={() => setIsOpenCreateModal(true)}>
-          <PlusSquareOutlined />
-          登録
-        </Button>
-      </div>
-      <TodoTable dataSource={dataSource} />
-      <CreateTodoModal
-        onCreateTodoHandler={handleCreateTodo}
-        isOpen={isOpenCreateModal}
-        onCancel={() => setIsOpenCreateModal(false)}
-      />
-    </div>
+    <>
+      {fetching ? (
+        <Loading isOpen />
+      ) : (
+        <>
+          <div style={{ marginBottom: 16 }}>
+            <Button type="primary" onClick={() => setIsOpenCreateModal(true)}>
+              <PlusSquareOutlined />
+              登録
+            </Button>
+          </div>
+          <TodoTable dataSource={dataSource} />
+          <CreateTodoModal
+            onCreateTodoHandler={handleCreateTodo}
+            isOpen={isOpenCreateModal}
+            onCancel={() => setIsOpenCreateModal(false)}
+          />
+        </>
+      )}
+    </>
   );
 }
