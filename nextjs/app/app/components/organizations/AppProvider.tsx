@@ -1,4 +1,5 @@
 "use client";
+import { UrqlProvider } from "@/app/store/urqlStore";
 import { createUrqlClient } from "@/graphql/client";
 import { AntdRegistry } from "@ant-design/nextjs-registry";
 import { ConfigProvider, ThemeConfig } from "antd";
@@ -10,12 +11,11 @@ interface Props {
   theme: ThemeConfig;
 }
 export function AppProvider({ children, theme }: Props) {
-  const urqlClient = createUrqlClient(process.env.NEXT_PUBLIC_GRAPHQL_URL);
   return (
     <AntdRegistry>
-      <Provider value={urqlClient}>
+      <UrqlProvider>
         <ConfigProvider theme={theme}>{children}</ConfigProvider>
-      </Provider>
+      </UrqlProvider>
     </AntdRegistry>
   );
 }

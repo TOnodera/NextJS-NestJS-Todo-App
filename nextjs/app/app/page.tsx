@@ -9,6 +9,7 @@ import { useMutation } from "urql";
 import { LoginDocument } from "@/graphql/@generated/graphql";
 import { post } from "./utills/forClientCompentnts";
 import { useRouter } from "next/navigation";
+import { useRecreateUrqlClient } from "./store/urqlStore";
 
 const schema = z.object({
   email: z.string().email({ message: "メールアドレスを入力してください。" }),
@@ -27,12 +28,15 @@ export default function Page() {
     resolver: zodResolver(schema),
   });
 
+  const recreateUrqlClient = useRecreateUrqlClient();
   const [, login] = useMutation(LoginDocument);
   const onSubmitHandler = async (loginInput: Schema) => {
     setIsPending(true);
     const { data } = await login({ loginInput });
     if (data) {
       await post<{ accessToken: string }, void>("/token", { accessToken: data.login.accessToken });
+      // urqlクライアント再生成
+      recreateUrqlClient();
       router.push("/todos");
     }
     setIsPending(false);
