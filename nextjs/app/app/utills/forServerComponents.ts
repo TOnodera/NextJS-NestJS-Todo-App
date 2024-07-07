@@ -1,26 +1,9 @@
 import "server-only";
 import { cookies } from "next/headers";
 import { SessionDataType } from "../type";
-import { v4 as uuid } from "uuid";
-import dayjs from "dayjs";
-import { COOKIE_TTL_DAY } from "../consts";
-import { createClient } from "redis";
 import pino from "pino";
-
-/**
- * 新規セッション作成
- * @returns
- */
-export const createSession = (): string => {
-  const sessionId = uuid();
-  cookies().set("session", sessionId, {
-    httpOnly: true,
-    secure: true,
-    maxAge: dayjs().add(COOKIE_TTL_DAY, "day").millisecond(),
-    path: "/",
-  });
-  return sessionId;
-};
+import { getRedisClient } from "./redis";
+import pretty from "pino-pretty";
 
 /**
  * Redisにアクセストークン設定
@@ -28,14 +11,13 @@ export const createSession = (): string => {
  * @param {string} accessToken
  */
 const setAccessTokenInRedis = async (sessionId: string, accessToken: string) => {
-  const client = await createClient({ url: process.env.REDIS_URL });
+  const client = await getRedisClient();
   await client.connect();
   await client.set(sessionId, JSON.stringify({ sessionId, accessToken }));
-  await client.disconnect();
+  await client.quit();
 };
 
-export const setAccessToken = async (accessToken: string): Promise<void> => {
-  const sessionId = createSession();
+export const setAccessToken = async (sessionId: string, accessToken: string): Promise<void> => {
   await setAccessTokenInRedis(sessionId, accessToken);
 };
 
@@ -44,25 +26,41 @@ export const setAccessToken = async (accessToken: string): Promise<void> => {
  * @returns {string | undefined}
  */
 export const getAccessToken = async (): Promise<string | undefined> => {
-  const sessionId = cookies().get("session")?.value;
+  const sessionId = cookies().get("sessionId")?.value;
   if (!sessionId) {
     return undefined;
   }
 
-  const client = await createClient({ url: process.env.REDIS_URL });
+  const client = await getRedisClient();
   await client.connect();
   const data = await client.get(sessionId);
+  await client.quit();
   if (!data) {
     return undefined;
   }
 
   const sessionData = JSON.parse(data) as SessionDataType;
-  await client.disconnect();
-
   return sessionData.accessToken;
+};
+
+export const deleteAccessToken = async () => {
+  const sessionId = cookies().get("sessionId")?.value;
+  if (!sessionId) {
+    return undefined;
+  }
+
+  const client = await getRedisClient();
+  await client.connect();
+  await client.del(sessionId);
+  await client.quit();
 };
 
 /**
  * ロガー
  */
-export const logger = pino({ level: process.env.NODE_ENV === "production" ? "info" : "debug" });
+export const logger = pino(
+  {
+    level: process.env.NODE_ENV === "production" ? "warn" : "debug",
+  },
+  pretty(),
+);

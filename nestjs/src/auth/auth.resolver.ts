@@ -8,6 +8,6 @@ export class AuthResolver {
   constructor(private readonly authService: AuthService) {}
   @Mutation(() => Token, { name: 'login' })
   async login(@Args('login') loginInput: LoginInput) {
-    return await this.authService.login(loginInput.email, loginInput.email);
+    return await this.authService.login(loginInput.email, loginInput.password);
   }
 }

@@ -8,6 +8,8 @@ import { TodoModule } from './todo/todo.module';
 import { PrismaService } from './prisma/prisma.service';
 import { AuthModule } from './auth/auth.module';
 import { UserModule } from './user/user.module';
+import { LoggerService } from './logger/logger.service';
+import { LoggerModule } from './logger/logger.module';
 
 @Module({
   imports: [
@@ -20,8 +22,9 @@ import { UserModule } from './user/user.module';
     TodoModule,
     AuthModule,
     UserModule,
+    LoggerModule,
   ],
   controllers: [AppController],
-  providers: [AppService, PrismaService],
+  providers: [AppService, PrismaService, LoggerService],
 })
 export class AppModule {}

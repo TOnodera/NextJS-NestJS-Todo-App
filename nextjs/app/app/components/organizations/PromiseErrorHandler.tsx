@@ -13,9 +13,9 @@ export default function PromiseErrorHandler({ children }: { children: React.Reac
      */
     const handler = (event: PromiseRejectionEvent) => {
       event.promise.catch((error) => {
-        if (error instanceof AuthenticationError) {
           // これ以上バブリングするとコンソールエラーとなる
           event.preventDefault();
+        if (error instanceof AuthenticationError) {
           router.push("/");
           return;
         }

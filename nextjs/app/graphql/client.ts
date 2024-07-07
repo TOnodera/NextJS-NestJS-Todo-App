@@ -3,16 +3,13 @@ import { get } from "@/app/utills/forClientCompentnts";
 import { AuthConfig, authExchange } from "@urql/exchange-auth";
 import { Client, cacheExchange, fetchExchange, mapExchange } from "urql";
 
-export const client = () => {
-  const url = process.env.NEXT_PUBLIC_GRAPHQL_URL;
-
+export const createUrqlClient = (url?: string) => {
   if (!url) {
     throw new Error("認証エンドポイントが設定されていません。");
   }
   return new Client({
     url,
     exchanges: [
-      cacheExchange,
       // エラーマッピング
       mapExchange({
         onError: (error, _operation) => {
@@ -23,6 +20,7 @@ export const client = () => {
           }
         },
       }),
+      cacheExchange,
       // 認証用
       authExchange(async (utils): Promise<AuthConfig> => {
         const { data } = await get<any, { accessToken: string }>("/token");
@@ -42,12 +40,7 @@ export const client = () => {
             return error.graphQLErrors.some((e) => e.message === "Unauthorized");
           },
           // トークンが無効か判定
-          willAuthError: () => {
-            if (!accessToken) {
-              return true;
-            }
-            return false;
-          },
+          willAuthError: () => !accessToken,
           // リフレッシュトークン発行
           refreshAuth: async () => {},
         };

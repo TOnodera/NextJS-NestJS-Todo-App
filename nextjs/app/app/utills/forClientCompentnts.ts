@@ -16,6 +16,8 @@ export async function post<T, R>(path: string, data: T): Promise<ApiResponse<R>>
     },
     method: "POST",
     body: JSON.stringify(data),
+    credentials: "include",
+    // cache: "no-store",
   }).then(async (r) => {
     return { data: (await r.json()) as R, status: r.status };
   });
@@ -40,6 +42,8 @@ export async function get<T extends Record<string, string>, R>(
       "Content-Type": "application/json",
     },
     method: "GET",
+    credentials: "include",
+    // cache: "no-store",
   }).then(async (r) => {
     return { data: (await r.json()) as R, status: r.status };
   });

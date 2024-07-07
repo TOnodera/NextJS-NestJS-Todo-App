@@ -2,7 +2,7 @@
 import { Button, Card, Col, Row } from "antd";
 import Loading from "./components/organizations/Loading";
 import { useState } from "react";
-import { string, z } from "zod";
+import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation } from "urql";
@@ -32,9 +32,7 @@ export default function Page() {
     setIsPending(true);
     const { data } = await login({ loginInput });
     if (data) {
-      console.log(1);
       await post<{ accessToken: string }, void>("/token", { accessToken: data.login.accessToken });
-      console.log(2);
       router.push("/todos");
     }
     setIsPending(false);
