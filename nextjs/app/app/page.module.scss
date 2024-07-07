@@ -1,0 +1,18 @@
+
+.login-form {
+    .login-form__row {
+    }
+    .login-form__input {
+        width: 100%;
+        display: block;
+        padding: .2rem;
+        border-radius: .3rem;
+        border: 1px solid #777;
+    }
+    .login-form__error {
+       height: 1.5rem; 
+       width: 100%;
+       color: red;
+       min-width: 250px;
+    }
+}

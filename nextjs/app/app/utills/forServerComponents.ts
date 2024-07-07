@@ -46,7 +46,7 @@ export const getAccessToken = async (): Promise<string | undefined> => {
 export const deleteAccessToken = async () => {
   const sessionId = cookies().get("sessionId")?.value;
   if (!sessionId) {
-    return undefined;
+    return;
   }
 
   const client = await getRedisClient();

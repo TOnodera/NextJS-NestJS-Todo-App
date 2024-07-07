@@ -1,5 +1,5 @@
 import { AuthenticationError } from "@/app/type";
-import { get } from "@/app/utills/forClientCompentnts";
+import { Get } from "@/app/utills/forClientCompentnts";
 import { AuthConfig, authExchange } from "@urql/exchange-auth";
 import { Client, cacheExchange, fetchExchange, mapExchange } from "urql";
 
@@ -23,7 +23,7 @@ export const createUrqlClient = (url?: string) => {
       cacheExchange,
       // 認証用
       authExchange(async (utils): Promise<AuthConfig> => {
-        const { data } = await get<any, { accessToken: string }>("/token");
+        const { data } = await Get<any, { accessToken: string }>("/token");
         const accessToken = data.accessToken;
         return {
           // ヘッダーにトークン埋め込み

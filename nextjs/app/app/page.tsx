@@ -7,9 +7,10 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation } from "urql";
 import { LoginDocument } from "@/graphql/@generated/graphql";
-import { post } from "./utills/forClientCompentnts";
+import { Post } from "./utills/forClientCompentnts";
 import { useRouter } from "next/navigation";
 import { useRecreateUrqlClient } from "./store/urqlStore";
+import style from "./page.module.scss";
 
 const schema = z.object({
   email: z.string().email({ message: "メールアドレスを入力してください。" }),
@@ -34,9 +35,10 @@ export default function Page() {
     setIsPending(true);
     const { data } = await login({ loginInput });
     if (data) {
-      await post<{ accessToken: string }, void>("/token", { accessToken: data.login.accessToken });
+      await Post<{ accessToken: string }, void>("/token", { accessToken: data.login.accessToken });
       // urqlクライアント再生成
       recreateUrqlClient();
+      // todoページに繊維
       router.push("/todos");
     }
     setIsPending(false);
@@ -48,14 +50,23 @@ export default function Page() {
       <Row justify="center" align="middle" style={{ height: "100vh" }}>
         <Col>
           <Card>
-            <form>
-              <div>
-                <input type="text" {...register("email")} />
-                {errors.email?.message && <p>{errors.email.message}</p>}
+            <h2>ログイン</h2>
+            <form className={style["login-form"]}>
+              <div className={style["login-form__row"]}>
+                <input className={style["login-form__input"]} type="text" {...register("email")} />
+                <div className={style["login-form__error"]}>
+                  {errors.email?.message && <p>{errors.email.message}</p>}
+                </div>
               </div>
-              <div>
-                <input type="text" {...register("password")} />
-                {errors.password?.message && <p>{errors.password.message}</p>}
+              <div className={style["login-form__row"]}>
+                <input
+                  className={style["login-form__input"]}
+                  type="text"
+                  {...register("password")}
+                />
+                <div className={style["login-form__error"]}>
+                  {errors.password?.message && <p>{errors.password.message}</p>}
+                </div>
               </div>
               <Button type="primary" onClick={handleSubmit(onSubmitHandler)}>
                 ログイン

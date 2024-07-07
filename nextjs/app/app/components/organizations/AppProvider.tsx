@@ -1,10 +1,8 @@
 "use client";
 import { UrqlProvider } from "@/app/store/urqlStore";
-import { createUrqlClient } from "@/graphql/client";
 import { AntdRegistry } from "@ant-design/nextjs-registry";
 import { ConfigProvider, ThemeConfig } from "antd";
 import React from "react";
-import { Provider } from "urql";
 
 interface Props {
   children: React.ReactNode;
