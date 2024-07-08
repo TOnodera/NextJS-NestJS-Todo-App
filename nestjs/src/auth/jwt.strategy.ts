@@ -21,10 +21,10 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
   async validate(payload: { username: string; sub: number }) {
     const user = await this.userService.findOne(payload.sub);
     if (!user) {
-      this.loggerService.fatal('token認証に失敗しました');
+      this.loggerService.debug('token認証に失敗しました');
       throw new UnauthorizedException();
     }
-    this.loggerService.log('token認証に成功');
+    this.loggerService.debug('token認証に成功');
     return user;
   }
 }

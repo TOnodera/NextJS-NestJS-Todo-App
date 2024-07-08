@@ -3,17 +3,20 @@ import { CreateUserInput } from './dto/create-user.input';
 import { UpdateUserInput } from './dto/update-user.input';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { UserWithoutPassword } from 'src/type';
+import { hash } from 'bcryptjs';
+import { HASH_ROUND } from 'src/const';
 
 @Injectable()
 export class UserService {
   constructor(private readonly prismaService: PrismaService) {}
 
   async create(createUserInput: CreateUserInput): Promise<UserWithoutPassword> {
+    const hashedPassword = await hash(createUserInput.password, HASH_ROUND);
     const { password, ...result } = await this.prismaService.users.create({
       data: {
         name: createUserInput.name,
         email: createUserInput.email,
-        password: createUserInput.password,
+        password: hashedPassword,
         role: { connect: { id: createUserInput.roleId } },
       },
     });
