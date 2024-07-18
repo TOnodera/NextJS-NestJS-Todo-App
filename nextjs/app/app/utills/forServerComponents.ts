@@ -2,7 +2,7 @@ import "server-only";
 import { cookies } from "next/headers";
 import { SessionDataType } from "../type";
 import pino from "pino";
-import { getRedisClient } from "./redis";
+import { getRedisConnection } from "./redis";
 import pretty from "pino-pretty";
 
 /**
@@ -11,10 +11,8 @@ import pretty from "pino-pretty";
  * @param {string} accessToken
  */
 const setAccessTokenInRedis = async (sessionId: string, accessToken: string) => {
-  const client = await getRedisClient();
-  await client.connect();
-  await client.set(sessionId, JSON.stringify({ sessionId, accessToken }));
-  await client.quit();
+  const conn = await getRedisConnection();
+  await conn.set(sessionId, JSON.stringify({ sessionId, accessToken }));
 };
 
 export const setAccessToken = async (sessionId: string, accessToken: string): Promise<void> => {
@@ -31,10 +29,8 @@ export const getAccessToken = async (): Promise<string | undefined> => {
     return undefined;
   }
 
-  const client = await getRedisClient();
-  await client.connect();
-  const data = await client.get(sessionId);
-  await client.quit();
+  const conn = await getRedisConnection();
+  const data = await conn.get(sessionId);
   if (!data) {
     return undefined;
   }
@@ -49,10 +45,8 @@ export const deleteAccessToken = async () => {
     return;
   }
 
-  const client = await getRedisClient();
-  await client.connect();
-  await client.del(sessionId);
-  await client.quit();
+  const conn = await getRedisConnection();
+  await conn.del(sessionId);
 };
 
 /**

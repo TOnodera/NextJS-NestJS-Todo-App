@@ -8,7 +8,7 @@ import { ApiResponse } from "../type";
  */
 export async function Post<T, R>(path: string, data: T): Promise<ApiResponse<R>> {
   const trimedPath = path.startsWith("/") ? path.slice(1) : path;
-  const url = `${process.env.NEXT_PUBLIC_API_URL}/${trimedPath}`;
+  const url = `${env().apiUrl}/${trimedPath}`;
   const result = await fetch(url, {
     headers: {
       "Content-Type": "application/json",
@@ -35,7 +35,7 @@ export async function Get<T extends Record<string, string>, R>(
 ): Promise<ApiResponse<R>> {
   const trimedPath = path.startsWith("/") ? path.slice(1) : path;
   const query = new URLSearchParams(data);
-  const url = `${process.env.NEXT_PUBLIC_API_URL}/${trimedPath}${data ? `?${query}` : ""}`;
+  const url = `${env().apiUrl}/${trimedPath}${data ? `?${query}` : ""}`;
   const result = await fetch(url, {
     headers: {
       "Content-Type": "application/json",
@@ -61,7 +61,7 @@ export async function Delete<T extends Record<string, string>, R>(
 ): Promise<ApiResponse<R>> {
   const trimedPath = path.startsWith("/") ? path.slice(1) : path;
   const query = new URLSearchParams(data);
-  const url = `${process.env.NEXT_PUBLIC_API_URL}/${trimedPath}${data ? `?${query}` : ""}`;
+  const url = `${env().apiUrl}/${trimedPath}${data ? `?${query}` : ""}`;
   const result = await fetch(url, {
     headers: {
       "Content-Type": "application/json",
@@ -74,3 +74,22 @@ export async function Delete<T extends Record<string, string>, R>(
   });
   return result;
 }
+
+/**
+ * 環境変数取得
+ */
+interface ClientEnv {
+  graphqlUrl: string;
+  apiUrl: string;
+}
+export const env = (): ClientEnv => {
+  const graphqlUrl = process.env.NEXT_PUBLIC_GRAPHQL_URL;
+  const apiUrl = process.env.NEXT_PUBLIC_API_URL;
+  if (!graphqlUrl || !apiUrl) {
+    throw new Error("環境変数が設定されていません");
+  }
+  return {
+    graphqlUrl,
+    apiUrl,
+  };
+};

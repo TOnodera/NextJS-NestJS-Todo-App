@@ -7,11 +7,10 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation } from "urql";
 import { LoginDocument } from "@/graphql/@generated/graphql";
-import { Post } from "./utills/forClientCompentnts";
+import { env, Post } from "./utills/forClientCompentnts";
 import { useRouter } from "next/navigation";
-import { useRecreateUrqlClient } from "./store/urqlStore";
 import style from "./page.module.scss";
-import { AuthenticationError } from "./type";
+import useUrqlClient from "@/hooks/useUrqlClient";
 
 const schema = z.object({
   email: z.string().email({ message: "メールアドレスを入力してください。" }),
@@ -20,6 +19,8 @@ const schema = z.object({
 type Schema = z.infer<typeof schema>;
 
 export default function Page() {
+  const url = env().graphqlUrl;
+  const { resetClient } = useUrqlClient({ url });
   const [isPending, setIsPending] = useState(false);
   const [isAuthError, setIsAuthError] = useState(false);
   const router = useRouter();
@@ -31,20 +32,22 @@ export default function Page() {
     resolver: zodResolver(schema),
   });
 
-  const recreateUrqlClient = useRecreateUrqlClient();
   const [, login] = useMutation(LoginDocument);
   const onSubmitHandler = async (loginInput: Schema) => {
     try {
       setIsPending(true);
+      // ログイン試行
       const { data } = await login({ loginInput });
       if (!data?.login.accessToken) {
-        throw new AuthenticationError();
+        router.push("/");
+        return;
       }
+      // トークン取得出来たらセッションに保存
       await Post<{ accessToken: string }, void>("/token", {
         accessToken: data.login.accessToken,
       });
       // urqlクライアント再生成
-      recreateUrqlClient();
+      resetClient();
       // todoページに繊維
       router.push("/todos");
       setIsAuthError(false);

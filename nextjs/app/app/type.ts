@@ -30,13 +30,3 @@ export type SessionDataType = {
   sessionId: string;
   accessToken: string | undefined;
 };
-
-abstract class BaseError extends Error {
-  constructor(message?: string) {
-    super(message);
-    Object.setPrototypeOf(this, new.target.prototype);
-  }
-}
-
-// 認証エラー型
-export class AuthenticationError extends BaseError {}

@@ -17,6 +17,7 @@ export async function POST(req: Request) {
   await setAccessToken(sessionId, body.accessToken);
   const cookie = `sessionId=${sessionId}; Expires=${dayjs().add(7, "day").toISOString()}; Secure; Path=/; Strict; HttpOnly;`;
   logger.debug(`cookie: ${cookie}`);
+  logger.debug(`save token is ${body.accessToken}`);
   return Response.json(
     {},
     {

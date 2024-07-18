@@ -6,19 +6,25 @@ import {
   RedisModules,
   RedisScripts,
 } from "redis";
+import { logger } from "./forServerComponents";
 
-let redisClient:
+let redisConnection:
   | RedisClientType<RedisDefaultModules & RedisModules, RedisFunctions, RedisScripts>
   | undefined = undefined;
 /**
- * redisクライアント生成
- * クライアントはシングルトンで使いまわす。
+ * redisコネクション生成
+ * コネクションはシングルトンで使いまわす。
  * @returns {RedisClientType<RedisDefaultModules & RedisModules, RedisFunctions, RedisScripts> | undefined} redisClient
  */
-export const getRedisClient = async () => {
-  if (redisClient) {
-    return redisClient;
+export const getRedisConnection = async () => {
+  if (redisConnection) {
+    return redisConnection;
   }
-  redisClient = await createClient({ url: process.env.REDIS_URL });
-  return redisClient;
+  redisConnection = await createClient({ url: process.env.REDIS_URL })
+    // エラーハンドラだけ実装しとく
+    .on("error", async (e) => {
+      logger.fatal(`redisでエラーが発生しました: ${e}`);
+    })
+    .connect();
+  return redisConnection;
 };

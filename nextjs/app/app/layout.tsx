@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
-import { ThemeConfig } from "antd";
 import React from "react";
 import "./globals.scss";
 import { AppProvider } from "./components/organizations/AppProvider";
@@ -12,18 +11,6 @@ const inter = Inter({ subsets: ["latin"] });
 export const metadata: Metadata = {
   title: "Todoアプリケーション",
   description: "Next.js/Nest.jsを使ったTodoアプリケーション作成",
-};
-
-//アプリケーション全体のテーマ生成
-const themeConfig: ThemeConfig = {
-  token: {
-    colorPrimaryBg: "#c7e3f9",
-  },
-  components: {
-    Menu: {
-      subMenuItemBg: "#fff",
-    },
-  },
 };
 
 export default function RootLayout({
@@ -40,7 +27,7 @@ export default function RootLayout({
       <body className={inter.className}>
         <ErrorHandler>
           <PromiseErrorHandler>
-            <AppProvider theme={themeConfig}>{children}</AppProvider>
+            <AppProvider>{children}</AppProvider>
           </PromiseErrorHandler>
         </ErrorHandler>
       </body>
