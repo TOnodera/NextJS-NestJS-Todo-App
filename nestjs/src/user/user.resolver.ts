@@ -21,21 +21,25 @@ export class UserResolver {
     return this.userService.create(createUserInput);
   }
 
+  @Roles([Role.ADMIN])
   @Query(() => [User], { name: 'users' })
   findAll() {
     return this.userService.findAll();
   }
 
+  @Roles([Role.ADMIN])
   @Query(() => User, { name: 'user' })
   findOne(@Args('id', { type: () => Int }) id: number) {
     return this.userService.findOne(id);
   }
 
+  @Roles([Role.ADMIN])
   @Mutation(() => User, { name: 'updateUser' })
   updateUser(@Args('updateUserInput') updateUserInput: UpdateUserInput) {
     return this.userService.update(updateUserInput.id, updateUserInput);
   }
 
+  @Roles([Role.ADMIN])
   @Mutation(() => User, { name: 'deleteUser' })
   removeUser(@Args('id', { type: () => Int }) id: number) {
     return this.userService.remove(id);
