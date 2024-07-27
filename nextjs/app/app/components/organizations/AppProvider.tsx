@@ -26,12 +26,16 @@ interface Props {
 export function AppProvider({ children }: Props) {
   const url = env().graphqlUrl;
   const { urqlClient, isAuthError, isNetworkError, resetClient } = useUrqlClient({ url });
+  console.log("AppProvider");
   const router = useRouter();
   useEffect(() => {
+    console.log("changed")
     if (isAuthError) {
+      console.error("isAuthError");
       router.push("/");
     }
     if (isNetworkError) {
+      console.error("isNetworkError");
       throw new Error();
     }
   }, [isAuthError, isNetworkError]);

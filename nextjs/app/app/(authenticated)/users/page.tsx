@@ -27,7 +27,9 @@ export default function Page() {
   /**
    * ユーザー取得
    */
-  const [result, reExecuteQuery] = useQuery({ query: GetUsersDocument });
+  const [result, reExecuteQuery] = useQuery({
+    query: GetUsersDocument,
+  });
   const { data, fetching, error } = result;
   const usersFragment = useFragment(UserFragmentDoc, data?.users);
 
@@ -35,7 +37,7 @@ export default function Page() {
    * データ再取得関数
    */
   const reFetch = () => {
-    reExecuteQuery({ requestPolicy: "network-only" });
+    reExecuteQuery();
   };
 
   /**

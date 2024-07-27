@@ -30,10 +30,10 @@ export default function Page() {
   const { data, fetching } = result;
 
   /**
-   * データ再取得関数定義（キャッシュからではなくネットワークから取得）
+   * データ再取得関数定義
    */
   const reFetch = () => {
-    reExecuteQuery({ requestPolicy: "network-only" });
+    reExecuteQuery();
   };
   // 型をつける
   const todoFragments = useFragment(TodoFragmentDoc, data?.todos);

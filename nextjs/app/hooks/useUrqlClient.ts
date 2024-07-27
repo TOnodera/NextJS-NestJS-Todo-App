@@ -1,7 +1,7 @@
 "use client";
 import { checkIsAuthError, Get } from "@/app/utills/forClientCompentnts";
-import { AuthConfig, authExchange } from "@urql/exchange-auth";
-import { useState } from "react";
+import { authExchange } from "@urql/exchange-auth";
+import { useEffect, useState } from "react";
 import { AnyVariables, cacheExchange, Client, fetchExchange, mapExchange, Operation } from "urql";
 
 /**
@@ -35,6 +35,7 @@ export default function useUrqlClient({ url }: Props) {
   const createUrqlClient = (url: string) => {
     return new Client({
       url,
+      requestPolicy: "network-only",
       exchanges: [
         /**
          * キャッシュ用
@@ -48,6 +49,7 @@ export default function useUrqlClient({ url }: Props) {
             // 認証エラーが発生したかどうかチェック
             // ログイン時の認証エラーはログイン画面で制御したいので除外する
             if (!checkIsLoginOperation(_operation) && checkIsAuthError(error)) {
+              console.error("認証エラー", setIsAuthError);
               setIsAuthError(true);
             }
             // ネットワークエラーのチェック
@@ -107,6 +109,10 @@ export default function useUrqlClient({ url }: Props) {
     console.log("resetClient()");
     return setUrqlClient(createUrqlClient(url));
   };
+
+  useEffect(() => {
+    console.log("isAuthError changed");
+  }, [isAuthError]);
 
   return {
     resetClient,
