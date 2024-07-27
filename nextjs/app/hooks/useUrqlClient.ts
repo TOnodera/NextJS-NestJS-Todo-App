@@ -1,15 +1,8 @@
-import { Get } from "@/app/utills/forClientCompentnts";
+"use client";
+import { checkIsAuthError, Get } from "@/app/utills/forClientCompentnts";
 import { AuthConfig, authExchange } from "@urql/exchange-auth";
 import { useState } from "react";
-import {
-  AnyVariables,
-  cacheExchange,
-  Client,
-  CombinedError,
-  fetchExchange,
-  mapExchange,
-  Operation,
-} from "urql";
+import { AnyVariables, cacheExchange, Client, fetchExchange, mapExchange, Operation } from "urql";
 
 /**
  * urqlクライアントの生成・再生成処理の実行関数や認証・ネットワーク関連のエラーの状態を保持するフック
@@ -17,9 +10,6 @@ import {
  * https://commerce.nearform.com/open-source/urql/docs/basics/errors/
  * https://commerce.nearform.com/open-source/urql/docs/advanced/authentication/
  */
-
-const checkIsAuthError = (e: CombinedError): boolean =>
-  e.graphQLErrors.some((e) => e.message === "Unauthorized" || "Forbidden resource");
 
 const checkIsLoginOperation = (operation: Operation<any, AnyVariables>) =>
   operation.query.definitions.some((definition: any) => definition?.name?.value === "Login");
@@ -47,6 +37,10 @@ export default function useUrqlClient({ url }: Props) {
       url,
       exchanges: [
         /**
+         * キャッシュ用
+         */
+        cacheExchange,
+        /**
          * ここでエラーマッピングする
          */
         mapExchange({
@@ -57,42 +51,35 @@ export default function useUrqlClient({ url }: Props) {
               setIsAuthError(true);
             }
             // ネットワークエラーのチェック
-            if (error.networkError instanceof Error) {
+            if (error.networkError) {
               setIsNetworkError(true);
             }
           },
         }),
         /**
-         * キャッシュ用
-         */
-        cacheExchange,
-        /**
          * 認証用
          */
-        authExchange(async (utils): Promise<AuthConfig> => {
+        authExchange(async (utils) => {
           const { data } = await Get<any, { accessToken: string }>("/token");
-          const accessToken = data.accessToken;
+          console.log("data: ", data);
+          const { accessToken } = data;
           return {
             // ヘッダーにトークン埋め込み
             addAuthToOperation: (operation) => {
+              console.log(`addAuthToOperation()`);
               if (!accessToken) {
+                console.log(`token is undefined`);
                 return operation;
               }
+              console.log(`set token ${accessToken}`);
               return utils.appendHeaders(operation, {
                 Authorization: `Bearer ${accessToken}`,
               });
             },
             // 認証エラーが発生したかの判定
-            didAuthError: (error) => {
-              if (checkIsAuthError(error)) {
-                return false;
-              }
-              setIsAuthError(false);
-              setIsNetworkError(false);
-              return true;
-            },
+            didAuthError: (error) => checkIsAuthError(error),
             // トークンが無効か判定
-            willAuthError: () => !accessToken,
+            willAuthError: () => !!accessToken,
             // リフレッシュトークン発行
             refreshAuth: async () => {
               /**
@@ -116,7 +103,10 @@ export default function useUrqlClient({ url }: Props) {
    * ログイン時とログアウト処理の時に新しいクライアント再生成する
    * @returns {Client} client
    */
-  const resetClient = () => setUrqlClient(createUrqlClient(url));
+  const resetClient = () => {
+    console.log("resetClient()");
+    return setUrqlClient(createUrqlClient(url));
+  };
 
   return {
     resetClient,

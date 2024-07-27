@@ -4,7 +4,7 @@ import useUrqlClient from "@/hooks/useUrqlClient";
 import { AntdRegistry } from "@ant-design/nextjs-registry";
 import { ConfigProvider, ThemeConfig } from "antd";
 import { useRouter } from "next/navigation";
-import React from "react";
+import React, { useEffect } from "react";
 import { Provider } from "urql";
 
 //アプリケーション全体のテーマ生成
@@ -26,12 +26,14 @@ export function AppProvider({ children }: Props) {
   const url = env().graphqlUrl;
   const { urqlClient, isAuthError, isNetworkError } = useUrqlClient({ url });
   const router = useRouter();
-  if (isAuthError) {
-    router.push("/");
-  }
-  if (isNetworkError) {
-    throw new Error();
-  }
+  useEffect(() => {
+    if (isAuthError) {
+      router.push("/");
+    }
+    if (isNetworkError) {
+      throw new Error();
+    }
+  }, [isAuthError, isNetworkError]);
   return (
     <Provider value={urqlClient}>
       <AntdRegistry>

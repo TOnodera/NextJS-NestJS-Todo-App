@@ -3,8 +3,6 @@ import { Inter } from "next/font/google";
 import React from "react";
 import "./globals.scss";
 import { AppProvider } from "./components/organizations/AppProvider";
-import ErrorHandler from "./components/organizations/PromiseErrorHandler";
-import PromiseErrorHandler from "./components/organizations/PromiseErrorHandler";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -25,11 +23,7 @@ export default function RootLayout({
         <meta name="viewport" content="width=device-width" />
       </head>
       <body className={inter.className}>
-        <ErrorHandler>
-          <PromiseErrorHandler>
-            <AppProvider>{children}</AppProvider>
-          </PromiseErrorHandler>
-        </ErrorHandler>
+        <AppProvider>{children}</AppProvider>
       </body>
     </html>
   );

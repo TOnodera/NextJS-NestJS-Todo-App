@@ -28,7 +28,7 @@ export default function Page() {
    * ユーザー取得
    */
   const [result, reExecuteQuery] = useQuery({ query: GetUsersDocument });
-  const { data, fetching } = result;
+  const { data, fetching, error } = result;
   const usersFragment = useFragment(UserFragmentDoc, data?.users);
 
   /**
@@ -81,7 +81,7 @@ export default function Page() {
 
   return (
     <>
-      {fetching ? (
+      {fetching || error ? (
         <Loading isOpen />
       ) : (
         <>

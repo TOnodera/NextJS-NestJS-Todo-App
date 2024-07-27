@@ -1,3 +1,5 @@
+"use client";
+import { CombinedError } from "urql";
 import { ApiResponse } from "../type";
 
 /**
@@ -93,3 +95,11 @@ export const env = (): ClientEnv => {
     apiUrl,
   };
 };
+
+/**
+ * Graphqlの認証エラー判定
+ * @param e
+ * @returns
+ */
+export const checkIsAuthError = (e: CombinedError): boolean =>
+  e.graphQLErrors.some((e) => e.message === "Unauthorized" || "Forbidden resource");

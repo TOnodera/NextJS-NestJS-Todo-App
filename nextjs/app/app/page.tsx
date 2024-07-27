@@ -34,28 +34,25 @@ export default function Page() {
 
   const [, login] = useMutation(LoginDocument);
   const onSubmitHandler = async (loginInput: Schema) => {
-    try {
-      setIsPending(true);
-      // ログイン試行
-      const { data } = await login({ loginInput });
-      if (!data?.login.accessToken) {
-        router.push("/");
-        return;
-      }
-      // トークン取得出来たらセッションに保存
-      await Post<{ accessToken: string }, void>("/token", {
-        accessToken: data.login.accessToken,
-      });
-      // urqlクライアント再生成
-      resetClient();
-      // todoページに繊維
-      router.push("/todos");
-      setIsAuthError(false);
-    } catch (e) {
+    setIsPending(true);
+    // ログイン試行
+    const { data } = await login({ loginInput });
+    if (!data?.login.accessToken) {
       setIsAuthError(true);
-    } finally {
       setIsPending(false);
+      router.push("/");
+      return;
     }
+    setIsAuthError(false);
+    // トークン取得出来たらセッションに保存
+    await Post<{ accessToken: string }, void>("/token", {
+      accessToken: data.login.accessToken,
+    });
+    // urqlクライアント再生成
+    resetClient();
+    // todoページに遷移
+    router.push("/todos");
+    setIsPending(false);
   };
 
   return (

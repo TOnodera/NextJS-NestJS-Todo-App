@@ -1,3 +1,4 @@
+import { COOKIE_TTL_DAY } from "@/app/consts";
 import {
   deleteAccessToken,
   getAccessToken,
@@ -15,7 +16,7 @@ export async function POST(req: Request) {
   }
   const sessionId = uuid();
   await setAccessToken(sessionId, body.accessToken);
-  const cookie = `sessionId=${sessionId}; Expires=${dayjs().add(7, "day").toISOString()}; Secure; Path=/; Strict; HttpOnly;`;
+  const cookie = `sessionId=${sessionId}; Expires=${dayjs().add(COOKIE_TTL_DAY, "day").toISOString()}; Secure; Path=/; Strict; HttpOnly;`;
   logger.debug(`cookie: ${cookie}`);
   logger.debug(`save token is ${body.accessToken}`);
   return Response.json(
@@ -30,13 +31,14 @@ export async function POST(req: Request) {
 }
 export async function GET(req: NextRequest) {
   const accessToken = await getAccessToken();
+  logger.debug(`get token: ${accessToken}`);
   return Response.json({ accessToken });
 }
 export async function DELETE(req: Request) {
   let token = await getAccessToken();
-  logger.debug(`トークン削除前: token=${token}`);
+  logger.debug(`before delete token: token=${token}`);
   await deleteAccessToken();
   token = await getAccessToken();
-  logger.debug(`トークン削除後: token=${token}`);
+  logger.debug(`after delete token: token=${token}`);
   return Response.json({});
 }
