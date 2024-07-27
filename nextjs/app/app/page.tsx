@@ -1,16 +1,16 @@
 "use client";
 import { Button, Card, Col, Row } from "antd";
 import Loading from "./components/organizations/Loading";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation } from "urql";
 import { LoginDocument } from "@/graphql/@generated/graphql";
-import { env, Post } from "./utills/forClientCompentnts";
+import { Post } from "./utills/forClientCompentnts";
 import { useRouter } from "next/navigation";
 import style from "./page.module.scss";
-import useUrqlClient from "@/hooks/useUrqlClient";
+import { UrqlContext } from "@/contexts/UrqlContext";
 
 const schema = z.object({
   email: z.string().email({ message: "メールアドレスを入力してください。" }),
@@ -19,8 +19,7 @@ const schema = z.object({
 type Schema = z.infer<typeof schema>;
 
 export default function Page() {
-  const url = env().graphqlUrl;
-  const { resetClient } = useUrqlClient({ url });
+  const urqlContext = useContext(UrqlContext);
   const [isPending, setIsPending] = useState(false);
   const [isAuthError, setIsAuthError] = useState(false);
   const router = useRouter();
@@ -49,7 +48,7 @@ export default function Page() {
       accessToken: data.login.accessToken,
     });
     // urqlクライアント再生成
-    resetClient();
+    urqlContext?.resetClient();
     // todoページに遷移
     router.push("/todos");
     setIsPending(false);

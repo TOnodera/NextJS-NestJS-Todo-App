@@ -1,9 +1,10 @@
 "use client";
 import { Delete, env } from "@/app/utills/forClientCompentnts";
-import useUrqlClient from "@/hooks/useUrqlClient";
+import { UrqlContext } from "@/contexts/UrqlContext";
 import { Button, Col, Row, theme } from "antd";
 import { Header as AntdHeader } from "antd/es/layout/layout";
 import { useRouter } from "next/navigation";
+import { useContext } from "react";
 
 const { useToken } = theme;
 
@@ -11,7 +12,7 @@ export default function Header() {
   const url = env().graphqlUrl;
   const { token } = useToken();
   const router = useRouter();
-  const { resetClient } = useUrqlClient({ url });
+  const urqlContext = useContext(UrqlContext);
 
   /**
    * ログアウト処理
@@ -20,7 +21,7 @@ export default function Header() {
     // セッションからtokenを削除
     await Delete("/token");
     // urqlクライアント再生成
-    resetClient();
+    urqlContext?.resetClient();
     // トップに遷移
     router.push("/");
   };

@@ -1,5 +1,6 @@
 "use client";
 import { env } from "@/app/utills/forClientCompentnts";
+import { UrqlContext } from "@/contexts/UrqlContext";
 import useUrqlClient from "@/hooks/useUrqlClient";
 import { AntdRegistry } from "@ant-design/nextjs-registry";
 import { ConfigProvider, ThemeConfig } from "antd";
@@ -24,7 +25,7 @@ interface Props {
 }
 export function AppProvider({ children }: Props) {
   const url = env().graphqlUrl;
-  const { urqlClient, isAuthError, isNetworkError } = useUrqlClient({ url });
+  const { urqlClient, isAuthError, isNetworkError, resetClient } = useUrqlClient({ url });
   const router = useRouter();
   useEffect(() => {
     if (isAuthError) {
@@ -36,9 +37,11 @@ export function AppProvider({ children }: Props) {
   }, [isAuthError, isNetworkError]);
   return (
     <Provider value={urqlClient}>
-      <AntdRegistry>
-        <ConfigProvider theme={themeConfig}>{children}</ConfigProvider>
-      </AntdRegistry>
+      <UrqlContext.Provider value={{ isAuthError, isNetworkError, resetClient }}>
+        <AntdRegistry>
+          <ConfigProvider theme={themeConfig}>{children}</ConfigProvider>
+        </AntdRegistry>
+      </UrqlContext.Provider>
     </Provider>
   );
 }
