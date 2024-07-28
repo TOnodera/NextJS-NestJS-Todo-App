@@ -1,7 +1,7 @@
 "use client";
 import { Button, Card, Col, Row } from "antd";
 import Loading from "./components/organizations/Loading";
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -54,7 +54,11 @@ export default function Page() {
     setIsPending(false);
   };
 
-  urqlContext?.setIsAuthError(false);
+  useEffect(() => {
+    if (urqlContext?.isAuthError) {
+      urqlContext?.setIsAuthError(false);
+    }
+  });
 
   return (
     <>

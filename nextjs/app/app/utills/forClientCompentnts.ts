@@ -102,4 +102,4 @@ export const env = (): ClientEnv => {
  * @returns
  */
 export const checkIsAuthError = (e: CombinedError): boolean =>
-  e.graphQLErrors.some((e) => e.message === "Unauthorized" || "[GraphQL] Forbidden resource");
+  e.graphQLErrors.some((e) => e.message === "Unauthorized" || e.message === "Forbidden resource");

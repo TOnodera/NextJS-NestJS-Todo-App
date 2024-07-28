@@ -49,7 +49,6 @@ export default function useUrqlClient({ url }: Props) {
             // 認証エラーが発生したかどうかチェック
             // ログイン時の認証エラーはログイン画面で制御したいので除外する
             if (!checkIsLoginOperation(_operation) && checkIsAuthError(error)) {
-              console.error("認証エラー", setIsAuthError);
               setIsAuthError(true);
             }
             // ネットワークエラーのチェック

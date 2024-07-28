@@ -19,6 +19,11 @@ export const STATUSES: { name: string; status: TODO_TASK_STATUS }[] = [
     status: TODO_TASK_STATUS.DONE,
   },
 ] as const;
+export const RoleEnum = {
+  Admin: "admin",
+  User: "user",
+} as const;
+export type RoleEnum = (typeof RoleEnum)[keyof typeof RoleEnum];
 
 export type RoleType = "admin" | "user";
 export type Role = { type: RoleType; name: string };

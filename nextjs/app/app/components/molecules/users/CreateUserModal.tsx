@@ -1,4 +1,4 @@
-import { Roles } from "@/app/consts";
+import { RoleEnum, Roles } from "@/app/consts";
 import { CreateUserInput } from "@/graphql/@generated/graphql";
 import { Button, Form, Input, Modal, Radio, Typography } from "antd";
 
@@ -39,7 +39,7 @@ export default function CreateUserModal({ isOpen, onCreateUserHandler, onCancel 
         >
           <Input name="password" />
         </Form.Item>
-        <Form.Item name="roleId" style={{ textAlign: "right" }}>
+        <Form.Item name="roleId" style={{ textAlign: "right" }} initialValue={RoleEnum.User}>
           <Radio.Group>
             {Roles.map((role) => (
               <Radio.Button key={role.type} value={role.type}>
