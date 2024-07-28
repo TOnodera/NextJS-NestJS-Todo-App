@@ -25,11 +25,13 @@ interface Props {
 }
 export function AppProvider({ children }: Props) {
   const url = env().graphqlUrl;
-  const { urqlClient, isAuthError, isNetworkError, resetClient } = useUrqlClient({ url });
+  const { urqlClient, setIsAuthError, isAuthError, isNetworkError, resetClient } = useUrqlClient({
+    url,
+  });
   console.log("AppProvider");
   const router = useRouter();
   useEffect(() => {
-    console.log("changed")
+    console.log("changed");
     if (isAuthError) {
       console.error("isAuthError");
       router.push("/");
@@ -41,7 +43,7 @@ export function AppProvider({ children }: Props) {
   }, [isAuthError, isNetworkError]);
   return (
     <Provider value={urqlClient}>
-      <UrqlContext.Provider value={{ isAuthError, isNetworkError, resetClient }}>
+      <UrqlContext.Provider value={{ setIsAuthError, isAuthError, isNetworkError, resetClient }}>
         <AntdRegistry>
           <ConfigProvider theme={themeConfig}>{children}</ConfigProvider>
         </AntdRegistry>

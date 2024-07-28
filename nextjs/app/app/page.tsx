@@ -54,6 +54,8 @@ export default function Page() {
     setIsPending(false);
   };
 
+  urqlContext?.setIsAuthError(false);
+
   return (
     <>
       <Loading isOpen={isPending} />

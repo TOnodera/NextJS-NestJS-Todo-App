@@ -117,6 +117,7 @@ export default function useUrqlClient({ url }: Props) {
   return {
     resetClient,
     isAuthError,
+    setIsAuthError,
     isNetworkError,
     urqlClient,
   };
