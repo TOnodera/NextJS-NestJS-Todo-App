@@ -14,7 +14,10 @@ export class AuthService {
     // ロガーのコンテキスト設定
     this.loggerService.setContext(AuthService.name);
   }
-  async login(email: string, pass: string): Promise<{ accessToken: string }> {
+  async login(
+    email: string,
+    pass: string,
+  ): Promise<{ accessToken: string; userId: number }> {
     const user = await this.userService.findByEmail(email);
     if (!user) {
       this.loggerService.debug('ログインに失敗しました');
@@ -30,6 +33,7 @@ export class AuthService {
     this.loggerService.debug('ログインしました');
     return {
       accessToken: await this.jwtService.signAsync(payload),
+      userId: user.id,
     };
   }
 }

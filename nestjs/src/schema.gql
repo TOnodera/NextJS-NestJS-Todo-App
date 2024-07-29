@@ -47,9 +47,12 @@ type User {
   updatedAt: DateTime!
 }
 
-type Token {
+type LoginResult {
   """トークン"""
   accessToken: String!
+
+  """ユーザーID"""
+  userId: String!
 }
 
 type Query {
@@ -63,7 +66,7 @@ type Mutation {
   createTodo(createTodoInput: CreateTodoInput!): Todo!
   updateTodo(updateTodoInput: UpdateTodoInput!): Todo!
   removeTodo(id: Int!): Todo!
-  login(login: LoginInput!): Token!
+  login(login: LoginInput!): LoginResult!
   createUser(createUserInput: CreateUserInput!): User!
   updateUser(updateUserInput: UpdateUserInput!): User!
   deleteUser(id: Int!): User!
