@@ -53,6 +53,9 @@ type LoginResult {
 
   """ユーザーID"""
   userId: String!
+
+  """ロールID"""
+  roleId: String!
 }
 
 type Query {

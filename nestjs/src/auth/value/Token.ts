@@ -7,4 +7,7 @@ export class LoginResult {
 
   @Field(() => String, { description: 'ユーザーID' })
   userId: number;
+
+  @Field(() => String, { description: 'ロールID' })
+  roleId: string;
 }

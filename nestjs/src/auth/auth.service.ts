@@ -1,5 +1,6 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
+import { strict } from 'assert';
 import { compare } from 'bcryptjs';
 import { LoggerService } from 'src/logger/logger.service';
 import { UserService } from 'src/user/user.service';
@@ -17,7 +18,7 @@ export class AuthService {
   async login(
     email: string,
     pass: string,
-  ): Promise<{ accessToken: string; userId: number }> {
+  ): Promise<{ accessToken: string; userId: number; roleId: string }> {
     const user = await this.userService.findByEmail(email);
     if (!user) {
       this.loggerService.debug('ログインに失敗しました');
@@ -34,6 +35,7 @@ export class AuthService {
     return {
       accessToken: await this.jwtService.signAsync(payload),
       userId: user.id,
+      roleId: user.role.id,
     };
   }
 }
