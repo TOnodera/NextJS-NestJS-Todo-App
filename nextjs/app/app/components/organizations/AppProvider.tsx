@@ -1,9 +1,9 @@
 "use client";
 import { env } from "@/app/utills/forClientCompentnts";
-import { UrqlContext } from "@/contexts/UrqlContext";
+import { AppContext } from "@/contexts/AppContext";
 import useUrqlClient from "@/hooks/useUrqlClient";
 import { AntdRegistry } from "@ant-design/nextjs-registry";
-import { ConfigProvider, ThemeConfig } from "antd";
+import { ConfigProvider, notification, ThemeConfig } from "antd";
 import { useRouter } from "next/navigation";
 import React, { useEffect } from "react";
 import { Provider } from "urql";
@@ -24,30 +24,38 @@ interface Props {
   children: React.ReactNode;
 }
 export function AppProvider({ children }: Props) {
+  // antdのtoastっぽいやつ使うために必要
+  const [notificationApi, contextHolder] = notification.useNotification();
   const url = env().graphqlUrl;
   const { urqlClient, setIsAuthError, isAuthError, isNetworkError, resetClient } = useUrqlClient({
     url,
   });
-  console.log("AppProvider");
   const router = useRouter();
   useEffect(() => {
-    console.log("changed");
     if (isAuthError) {
-      console.error("isAuthError");
+      notificationApi.open({
+        message: "認証エラーが発生しました",
+        description: "許可されていない操作が実行されました。再ログインしてください。",
+        duration: 0,
+      });
       router.push("/");
     }
     if (isNetworkError) {
-      console.error("isNetworkError");
       throw new Error();
     }
   }, [isAuthError, isNetworkError]);
   return (
     <Provider value={urqlClient}>
-      <UrqlContext.Provider value={{ setIsAuthError, isAuthError, isNetworkError, resetClient }}>
+      <AppContext.Provider
+        value={{ setIsAuthError, isAuthError, isNetworkError, resetClient, notificationApi }}
+      >
         <AntdRegistry>
-          <ConfigProvider theme={themeConfig}>{children}</ConfigProvider>
+          <ConfigProvider theme={themeConfig}>
+            {contextHolder}
+            {children}
+          </ConfigProvider>
         </AntdRegistry>
-      </UrqlContext.Provider>
+      </AppContext.Provider>
     </Provider>
   );
 }

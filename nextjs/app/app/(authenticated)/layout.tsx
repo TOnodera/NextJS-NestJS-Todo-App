@@ -11,7 +11,7 @@ import Link from "next/link";
 
 export const metadata: Metadata = {
   title: "Todoアプリケーション",
-  description: "Next.js/Nest.jsを使ったTodoアプリケーション作成",
+  description: "Next.js/Nest.jsを使ったTodoアプリケーション作成(認証済みページ)",
 };
 
 // サイドメニュー

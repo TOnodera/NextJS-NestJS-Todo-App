@@ -3,6 +3,8 @@ import { Inter } from "next/font/google";
 import React from "react";
 import "./globals.scss";
 import { AppProvider } from "./components/organizations/AppProvider";
+import { ErrorBoundary } from "react-error-boundary";
+import Error from "./error";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -23,7 +25,9 @@ export default function RootLayout({
         <meta name="viewport" content="width=device-width" />
       </head>
       <body className={inter.className}>
-        <AppProvider>{children}</AppProvider>
+        <ErrorBoundary fallback={<Error />}>
+          <AppProvider>{children}</AppProvider>
+        </ErrorBoundary>
       </body>
     </html>
   );
