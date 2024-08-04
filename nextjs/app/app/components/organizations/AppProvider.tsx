@@ -1,11 +1,11 @@
 "use client";
 import { env } from "@/app/utills/forClientCompentnts";
-import { AppContext } from "@/contexts/AppContext";
+import { AppContext, User } from "@/contexts/AppContext";
 import useUrqlClient from "@/hooks/useUrqlClient";
 import { AntdRegistry } from "@ant-design/nextjs-registry";
 import { ConfigProvider, notification, ThemeConfig } from "antd";
 import { useRouter } from "next/navigation";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { Provider } from "urql";
 
 //アプリケーション全体のテーマ生成
@@ -26,11 +26,20 @@ interface Props {
 export function AppProvider({ children }: Props) {
   // antdのtoastっぽいやつ使うために必要
   const [notificationApi, contextHolder] = notification.useNotification();
+  // urql関連
   const url = env().graphqlUrl;
   const { urqlClient, setIsAuthError, isAuthError, isNetworkError, resetClient } = useUrqlClient({
     url,
   });
+  // ユーザー情報
+  const [user, setUser] = useState<User | undefined>(undefined);
+  // ユーザー情報取得
+  const getUser = () => {
+    return user;
+  };
+  // 認証エラー時にリダイレクトさせるために利用するルーター
   const router = useRouter();
+  // isAuthError, isNetworkErrorを監視
   useEffect(() => {
     if (isAuthError) {
       notificationApi.open({
@@ -47,7 +56,15 @@ export function AppProvider({ children }: Props) {
   return (
     <Provider value={urqlClient}>
       <AppContext.Provider
-        value={{ setIsAuthError, isAuthError, isNetworkError, resetClient, notificationApi }}
+        value={{
+          setUser,
+          getUser,
+          setIsAuthError,
+          isAuthError,
+          isNetworkError,
+          resetClient,
+          notificationApi,
+        }}
       >
         <AntdRegistry>
           <ConfigProvider theme={themeConfig}>

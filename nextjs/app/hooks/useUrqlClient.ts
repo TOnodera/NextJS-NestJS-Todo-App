@@ -49,6 +49,7 @@ export default function useUrqlClient({ url }: Props) {
             // 認証エラーが発生したかどうかチェック
             // ログイン時の認証エラーはログイン画面で制御したいので除外する
             if (!checkIsLoginOperation(_operation) && checkIsAuthError(error)) {
+              console.error("mapExchange.onError(): 認証エラー発生 ", error);
               setIsAuthError(true);
             }
             // ネットワークエラーのチェック
@@ -62,7 +63,6 @@ export default function useUrqlClient({ url }: Props) {
          */
         authExchange(async (utils) => {
           const { data } = await Get<any, { accessToken: string }>("/token");
-          console.log("data: ", data);
           const { accessToken } = data;
           return {
             // ヘッダーにトークン埋め込み

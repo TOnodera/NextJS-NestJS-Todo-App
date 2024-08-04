@@ -48,21 +48,31 @@ type User {
 }
 
 type LoginResult {
+  """ユーザーID"""
+  userId: Float!
+
+  """ユーザー名"""
+  userName: String!
+
   """トークン"""
   accessToken: String!
-
-  """ユーザーID"""
-  userId: String!
 
   """ロールID"""
   roleId: String!
 }
 
 type Query {
-  todos: [Todo!]!
+  todos(getsTodoInput: GetsTodoInput!): [Todo!]!
   todo(id: Int!): Todo!
   users: [User!]!
   user(id: Int!): User!
+}
+
+input GetsTodoInput {
+  userId: Int!
+
+  """ロールID"""
+  roleId: String!
 }
 
 type Mutation {
@@ -81,6 +91,9 @@ input CreateTodoInput {
 
   """詳細"""
   description: String
+
+  """ユーザーID"""
+  userId: Float!
 }
 
 input UpdateTodoInput {

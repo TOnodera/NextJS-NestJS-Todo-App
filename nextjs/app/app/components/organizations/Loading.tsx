@@ -1,3 +1,4 @@
+"use client";
 import { Col, Row, Spin } from "antd";
 
 interface Props {

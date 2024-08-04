@@ -1,18 +1,15 @@
-import type { Metadata } from "next";
+"use client";
 import { Card, Layout } from "antd";
 import { Content } from "antd/es/layout/layout";
 import "antd/dist/reset.css";
 import { CheckSquareOutlined, UserOutlined } from "@ant-design/icons";
-import React from "react";
+import React, { useContext } from "react";
 import SideMenu from "../components/organizations/Sider";
 import Header from "../components/organizations/Header";
 import Footer from "../components/organizations/Footer";
 import Link from "next/link";
-
-export const metadata: Metadata = {
-  title: "Todoアプリケーション",
-  description: "Next.js/Nest.jsを使ったTodoアプリケーション作成(認証済みページ)",
-};
+import SuspenseWrapper from "../components/atoms/SuspenceWrapper";
+import { AppContext } from "@/contexts/AppContext";
 
 // サイドメニュー
 const menus = [
@@ -20,24 +17,28 @@ const menus = [
     key: "users",
     label: <Link href="/users">ユーザー管理</Link>,
     icon: <UserOutlined />,
+    role: ["admin"],
   },
   {
     key: "todos",
     label: <Link href="/todos">TODO管理</Link>,
     icon: <CheckSquareOutlined />,
+    role: ["user", "admin"],
   },
 ];
 
-export default async function RootLayout({
+export default function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const appState = useContext(AppContext);
+  const user = appState.getUser();
   return (
     <Layout style={{ height: "100vh" }}>
       <Header />
       <Layout hasSider>
-        <SideMenu menus={menus} />
+        <SideMenu menus={menus.filter((menu) => menu.role.includes(user?.roleId as string))} />
         <Layout>
           <Content style={{ marginTop: "3rem", padding: "3rem" }}>
             <Card
@@ -49,7 +50,7 @@ export default async function RootLayout({
                 overflowY: "auto",
               }}
             >
-              {children}
+              <SuspenseWrapper>{children}</SuspenseWrapper>
             </Card>
           </Content>
           <Footer />

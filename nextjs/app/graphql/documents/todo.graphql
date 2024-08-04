@@ -25,8 +25,8 @@ mutation RemoveTodo($id: Int!) {
   }
 }
 
-query GetTodos {
-  todos {
+query GetTodos($getsTodoInput: GetsTodoInput!) {
+  todos(getsTodoInput: $getsTodoInput) {
     ...Todo
   }
 }

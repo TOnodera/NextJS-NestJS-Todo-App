@@ -7,7 +7,6 @@ export default function Footer() {
     <AntdFooter
       style={{
         textAlign: "center",
-        // backgroundColor: token.colorPrimaryBg,
         height: token.lineHeightSM,
       }}
     >

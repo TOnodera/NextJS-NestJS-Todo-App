@@ -27,7 +27,6 @@ export default function Header() {
   return (
     <AntdHeader
       style={{
-        // backgroundColor: token.colorPrimaryBg,
         paddingLeft: token.paddingXS,
       }}
     >

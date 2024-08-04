@@ -30,11 +30,7 @@ export default function SideMenu({ menus }: Props) {
       >
         <MenuOutlined />
       </span>
-      <Menu
-        // style={{ backgroundColor: token.colorPrimaryBg }}
-        theme="dark"
-        items={menus}
-      />
+      <Menu theme="dark" items={menus} />
     </Sider>
   );
 }

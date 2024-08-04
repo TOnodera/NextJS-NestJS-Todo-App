@@ -2,16 +2,30 @@ import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { CreateTodoInput } from './dto/create-todo.input';
 import { UpdateTodoInput } from './dto/update-todo.input';
+import { GetsTodoInput } from './dto/gets-todo.input';
+import { Role } from 'src/type';
 
 @Injectable()
 export class TodoService {
   constructor(private prisma: PrismaService) {}
   async create(createTodoInput: CreateTodoInput) {
-    return await this.prisma.todos.create({ data: createTodoInput });
+    return await this.prisma.todos.create({
+      data: createTodoInput,
+    });
   }
 
-  async findAll() {
-    return await this.prisma.todos.findMany({ orderBy: { createdAt: 'desc' } });
+  async findAll(getsTodoInput: GetsTodoInput) {
+    // 管理者の場合はすべてのTodoデータを返す
+    if (getsTodoInput.roleId === Role.ADMIN) {
+      return await this.prisma.todos.findMany({
+        orderBy: { createdAt: 'desc' },
+      });
+    }
+    // ユーザーの場合は自分のTodoデータのみ返す
+    return await this.prisma.todos.findMany({
+      where: { userId: getsTodoInput.userId },
+      orderBy: { createdAt: 'desc' },
+    });
   }
 
   async findOne(id: number) {

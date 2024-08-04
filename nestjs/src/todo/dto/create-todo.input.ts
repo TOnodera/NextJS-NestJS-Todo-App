@@ -10,4 +10,8 @@ export class CreateTodoInput {
   @Field(() => String, { description: '詳細', nullable: true })
   @IsOptional()
   description: string;
+
+  @IsNotEmpty()
+  @Field(() => Number, { description: 'ユーザーID' })
+  userId: number;
 }

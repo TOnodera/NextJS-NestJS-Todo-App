@@ -6,6 +6,7 @@ import { UpdateTodoInput } from './dto/update-todo.input';
 import { UseGuards } from '@nestjs/common';
 import { JwtAuthGuard } from 'src/auth/auth.guard';
 import { RolesGuard } from 'src/auth/roles.guard';
+import { GetsTodoInput } from './dto/gets-todo.input';
 
 @UseGuards(RolesGuard)
 @UseGuards(JwtAuthGuard)
@@ -19,8 +20,8 @@ export class TodoResolver {
   }
 
   @Query(() => [Todo], { name: 'todos' })
-  async findAll() {
-    return await this.todoService.findAll();
+  async findAll(@Args('getsTodoInput') getsTodoInput: GetsTodoInput) {
+    return await this.todoService.findAll(getsTodoInput);
   }
 
   @Query(() => Todo, { name: 'todo' })

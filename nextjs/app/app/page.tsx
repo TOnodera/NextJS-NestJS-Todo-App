@@ -45,6 +45,9 @@ export default function Page() {
     });
     // urqlクライアント再生成
     appContext?.resetClient();
+    // ユーザー情報設定
+    const { userId, roleId, userName } = data.login;
+    appContext?.setUser({ userId, roleId, userName });
     // todoページに遷移
     router.push("/todos");
   };

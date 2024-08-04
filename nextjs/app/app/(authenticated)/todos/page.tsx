@@ -1,5 +1,4 @@
-import SuspenseWrapper from "@/app/components/atoms/SuspenceWrapper";
-import Client from "./client";
+import Client from "@/app/components/pages/todos/Client";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -8,9 +7,5 @@ export const metadata: Metadata = {
 };
 
 export default function Page() {
-  return (
-    <SuspenseWrapper>
-      <Client />
-    </SuspenseWrapper>
-  );
+  return <Client />;
 }
